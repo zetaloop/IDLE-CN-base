@@ -1,14 +1,20 @@
-What's New in IDLE 3.6.0?
-===========================
-*Release date: 2016-09-??*
+What's New in IDLE 3.5.2?
+=========================
+*Release date: 2016-06-30?*
+
+- Issue #24759: Make clear in idlelib.idle_test.__init__ that the directory
+  is a private implementation of test.test_idle and tool for maintainers.
+
+- Issue #27196: Stop 'ThemeChangef' warnings when running IDLE tests.
+  These persisted after other warnings were suppressed in #20567.
+  Apply Serhiy Storchaka's update_idletasks solution to four test files.
+  Record this additional advice in idle_test/README.txt
+
+- Issue #20567: Revise idle_test/README.txt with advice about avoiding
+  tk warning messages from tests.  Apply advice to several IDLE tests.
 
 - Issue #27117: Make colorizer htest and turtledemo work with dark themes.
   Move code for configuring text widget colors to a new function.
-
-- Issue #24225: Rename many idlelib/*.py and idle_test/test_*.py files.
-  Edit files to replace old names with new names when the old name
-  referred to the module rather than the class it contained.
-  See the issue and IDLE section in What's New in 3.6 for more.
 
 - Issue #26673: When tk reports font size as 0, change to size 10.
   Such fonts on Linux prevented the configuration dialog from opening.
@@ -22,8 +28,8 @@ What's New in IDLE 3.6.0?
 - Issue #18410: Add test for IDLE's search dialog.
   Original patch by Westley Martínez.
 
-- Issue #21703: Add test for undo delegator.  Patch mostly by
-  Saimadhav Heblikar .
+- Issue #21703: Add test for undo delegator.
+  Original patch by Saimadhav Heblikar .
 
 - Issue #27044: Add ConfigDialog.remove_var_callbacks to stop memory leaks.
 
@@ -41,6 +47,11 @@ What's New in IDLE 3.6.0?
 - Issue #25905: Revert unwanted conversion of ' to ’ RIGHT SINGLE QUOTATION
   MARK in README.txt and open this and NEWS.txt with 'ascii'.
   Re-encode CREDITS.txt to utf-8 and open it with 'utf-8'.
+
+
+What's New in IDLE 3.5.1?
+=========================
+*Release date: 2015-12-06*
 
 - Issue 15348: Stop the debugger engine (normally in a user process)
   before closing the debugger window (running in the IDLE process).
@@ -319,11 +330,6 @@ What's New in IDLE 3.1b1?
 - Use of 'filter' in keybindingDialog.py was causing custom key assignment to
   fail.  Patch 5707 amaury.forgeotdarc.
 
-
-What's New in IDLE 3.1a1?
-=========================
-*Release date: 07-Mar-09*
-
 - Issue #4815: Offer conversion to UTF-8 if source files have
   no encoding declaration and are not encoded in UTF-8.
 
@@ -362,11 +368,6 @@ What's New in IDLE 2.7? (UNRELEASED, but merged into 3.1 releases above.)
   mixed space/tab properly. Issue 5129, patch by Guilherme Polo.
 
 - Issue #3549: On MacOS the preferences menu was not present
-
-
-What's New in IDLE 3.0?
-=======================
-*Release date: 03-Dec-2008*
 
 - IDLE would print a "Unhandled server exception!" message when internal
   debugging is enabled.
