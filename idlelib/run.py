@@ -7,17 +7,23 @@ import threading
 import queue
 import tkinter
 
-from idlelib import calltips
-from idlelib import autocomplete
+from idlelib import CallTips
+from idlelib import AutoComplete
 
-from idlelib import debugger_r
-from idlelib import debugobj_r
-from idlelib import stackviewer
+from idlelib import RemoteDebugger
+from idlelib import RemoteObjectBrowser
+from idlelib import StackViewer
 from idlelib import rpc
-from idlelib import pyshell
-from idlelib import iomenu
+from idlelib import PyShell
+from idlelib import IOBinding
 
 import __main__
+
+for mod in ('simpledialog', 'messagebox', 'font',
+            'dialog', 'filedialog', 'commondialog',
+            'colorchooser'):
+    delattr(tkinter, mod)
+    del sys.modules['tkinter.' + mod]
 
 LOCALHOST = '127.0.0.1'
 
@@ -32,7 +38,7 @@ def idle_showwarning_subproc(
     if file is None:
         file = sys.stderr
     try:
-        file.write(pyshell.idle_formatwarning(
+        file.write(PyShell.idle_formatwarning(
                 message, category, filename, lineno, line))
     except IOError:
         pass # the file (probably stderr) is invalid - this warning gets lost.
@@ -82,7 +88,7 @@ def main(del_exitfunc=False):
     MyHandler object.  That reference is saved as attribute rpchandler of the
     Executive instance.  The Executive methods have access to the reference and
     can pass it on to entities that they command
-    (e.g. debugger_r.Debugger.start_debugger()).  The latter, in turn, can
+    (e.g. RemoteDebugger.Debugger.start_debugger()).  The latter, in turn, can
     call MyHandler(SocketIO) register/unregister methods via the reference to
     register and unregister themselves.
 
@@ -204,7 +210,7 @@ def print_exception():
             tbe = traceback.extract_tb(tb)
             print('Traceback (most recent call last):', file=efile)
             exclude = ("run.py", "rpc.py", "threading.py", "queue.py",
-                       "debugger_r.py", "bdb.py")
+                       "RemoteDebugger.py", "bdb.py")
             cleanup_traceback(tbe, exclude)
             traceback.print_list(tbe, file=efile)
         lines = traceback.format_exception_only(typ, exc)
@@ -298,12 +304,12 @@ class MyHandler(rpc.RPCHandler):
         executive = Executive(self)
         self.register("exec", executive)
         self.console = self.get_remote_proxy("console")
-        sys.stdin = pyshell.PseudoInputFile(self.console, "stdin",
-                iomenu.encoding)
-        sys.stdout = pyshell.PseudoOutputFile(self.console, "stdout",
-                iomenu.encoding)
-        sys.stderr = pyshell.PseudoOutputFile(self.console, "stderr",
-                iomenu.encoding)
+        sys.stdin = PyShell.PseudoInputFile(self.console, "stdin",
+                IOBinding.encoding)
+        sys.stdout = PyShell.PseudoOutputFile(self.console, "stdout",
+                IOBinding.encoding)
+        sys.stderr = PyShell.PseudoOutputFile(self.console, "stderr",
+                IOBinding.encoding)
 
         sys.displayhook = rpc.displayhook
         # page help() text to shell.
@@ -339,8 +345,8 @@ class Executive(object):
     def __init__(self, rpchandler):
         self.rpchandler = rpchandler
         self.locals = __main__.__dict__
-        self.calltip = calltips.CallTips()
-        self.autocomplete = autocomplete.AutoComplete()
+        self.calltip = CallTips.CallTips()
+        self.autocomplete = AutoComplete.AutoComplete()
 
     def runcode(self, code):
         global interruptable
@@ -372,7 +378,7 @@ class Executive(object):
             thread.interrupt_main()
 
     def start_the_debugger(self, gui_adap_oid):
-        return debugger_r.start_debugger(self.rpchandler, gui_adap_oid)
+        return RemoteDebugger.start_debugger(self.rpchandler, gui_adap_oid)
 
     def stop_the_debugger(self, idb_adap_oid):
         "Unregister the Idb Adapter.  Link objects and Idb then subject to GC"
@@ -396,7 +402,7 @@ class Executive(object):
             tb = tb.tb_next
         sys.last_type = typ
         sys.last_value = val
-        item = stackviewer.StackTreeItem(flist, tb)
-        return debugobj_r.remote_object_tree_item(item)
+        item = StackViewer.StackTreeItem(flist, tb)
+        return RemoteObjectBrowser.remote_object_tree_item(item)
 
 capture_warnings(False)  # Make sure turned off; see issue 18081
