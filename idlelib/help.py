@@ -4,7 +4,7 @@ Contents are subject to revision at any time, without notice.
 
 Help => About IDLE: diplay About Idle dialog
 
-<to be moved here from help_about.py>
+<to be moved here from aboutDialog.py>
 
 
 Help => IDLE Help: Display help.html with proper formatting.
@@ -25,10 +25,11 @@ copy_strip - Copy idle.html to help.html, rstripping each line.
 show_idlehelp - Create HelpWindow.  Called in EditorWindow.help_dialog.
 """
 from html.parser import HTMLParser
-from os.path import abspath, dirname, isfile, join
-from tkinter import Toplevel, Frame, Text, Scrollbar, Menu, Menubutton
+from os.path import abspath, dirname, isdir, isfile, join
+from platform import python_version
+from tkinter import Tk, Toplevel, Frame, Text, Scrollbar, Menu, Menubutton
 from tkinter import font as tkfont
-from idlelib.config import idleConf
+from idlelib.configHandler import idleConf
 
 use_ttk = False # until available to import
 if use_ttk:
@@ -265,7 +266,7 @@ def show_idlehelp(parent):
     if not isfile(filename):
         # try copy_strip, present message
         return
-    HelpWindow(parent, filename, 'IDLE Help')
+    HelpWindow(parent, filename, 'IDLE Help (%s)' % python_version())
 
 if __name__ == '__main__':
     from idlelib.idle_test.htest import run
