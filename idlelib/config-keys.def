@@ -7,7 +7,7 @@
 # is used in all cases, for consistency in auto key conflict checking in the
 # configuration gui.
 
-[IDLE Classic Windows]
+[IDLE 经典 Windows]
 copy=<Control-Key-c> <Control-Key-C>
 cut=<Control-Key-x> <Control-Key-X>
 paste=<Control-Key-v> <Control-Key-V>
@@ -67,7 +67,7 @@ run-custom= <Shift-Key-F5>
 check-module= <Alt-Key-x>
 zoom-height= <Alt-Key-2>
 
-[IDLE Classic Unix]
+[IDLE 经典 Unix]
 copy=<Alt-Key-w> <Meta-Key-w>
 cut=<Control-Key-w>
 paste=<Control-Key-y>
@@ -127,7 +127,7 @@ run-custom= <Shift-Key-F5>
 check-module= <Alt-Key-x>
 zoom-height= <Alt-Key-2>
 
-[IDLE Modern Unix]
+[IDLE 现代 Unix]
 copy = <Control-Shift-Key-C> <Control-Key-Insert>
 cut = <Control-Key-x> <Shift-Key-Delete>
 paste = <Control-Key-v> <Shift-Key-Insert>
@@ -187,7 +187,7 @@ run-custom= <Shift-Key-F5>
 check-module= <Alt-Key-x>
 zoom-height= <Alt-Key-2>
 
-[IDLE Classic Mac]
+[IDLE 经典 Mac]
 copy=<Command-Key-c>
 cut=<Command-Key-x>
 paste=<Command-Key-v>
@@ -247,7 +247,7 @@ run-custom= <Shift-Key-F5>
 check-module= <Option-Key-x>
 zoom-height= <Option-Key-0>
 
-[IDLE Classic OSX]
+[IDLE 经典 OSX]
 toggle-tabs = <Control-Key-t>
 interrupt-execution = <Control-Key-c>
 untabify-region = <Control-Key-6>
