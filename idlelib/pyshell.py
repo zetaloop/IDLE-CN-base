@@ -7,8 +7,8 @@ if __name__ == "__main__":
 try:
     from tkinter import *
 except ImportError:
-    print("** IDLE can't import Tkinter.\n"
-          "Your Python may not be configured for Tk. **", file=sys.__stderr__)
+    print("** IDLE 无法导入 Tkinter.\n"
+          "您的 Python 可能不支持 Tk. **", file=sys.__stderr__)
     raise SystemExit(1)
 
 # Valid arguments for the ...Awareness call below are defined in the following.
@@ -58,7 +58,7 @@ HOST = '127.0.0.1' # python execution server on localhost loopback
 PORT = 0  # someday pass in host, port for remote debug capability
 
 try:  # In case IDLE started with -n.
-    eof = 'Ctrl-D (end-of-file)'
+    eof = 'Ctrl-D (文件末尾符)'
     exit.eof = eof
     quit.eof = eof
 except NameError: # In case python started with -S.
@@ -151,12 +151,12 @@ class PyShellEditorWindow(EditorWindow):
         self.color_breakpoint_text()
 
     rmenu_specs = [
-        ("Cut", "<<cut>>", "rmenu_check_cut"),
-        ("Copy", "<<copy>>", "rmenu_check_copy"),
-        ("Paste", "<<paste>>", "rmenu_check_paste"),
+        ("剪切", "<<cut>>", "rmenu_check_cut"),
+        ("复制", "<<copy>>", "rmenu_check_copy"),
+        ("粘贴", "<<paste>>", "rmenu_check_paste"),
         (None, None, None),
-        ("Set Breakpoint", "<<set-breakpoint>>", None),
-        ("Clear Breakpoint", "<<clear-breakpoint>>", None)
+        ("设置断点", "<<set-breakpoint>>", None),
+        ("清除断点", "<<clear-breakpoint>>", None)
     ]
 
     def color_breakpoint_text(self, color=True):
@@ -265,8 +265,8 @@ class PyShellEditorWindow(EditorWindow):
         except OSError as err:
             if not getattr(self.root, "breakpoint_error_displayed", False):
                 self.root.breakpoint_error_displayed = True
-                messagebox.showerror(title='IDLE Error',
-                    message='Unable to update breakpoint list:\n%s'
+                messagebox.showerror(title='IDLE 错误',
+                    message='无法更新断点列表:\n%s'
                         % str(err),
                     parent=self.text)
 
@@ -404,9 +404,10 @@ def restart_line(width, filename):  # See bpo-38141.
     Fill line with balanced '='s, with any extras and at least one at
     the beginning.  Do not end with a trailing space.
     """
-    tag = f"= RESTART: {filename or 'Shell'} ="
-    if width >= len(tag):
-        div, mod = divmod((width -len(tag)), 2)
+    tag = f"= 重新启动: {filename or '命令行'} ="
+    tag_len = sum(2 if '\u4e00' <= ch <= '\u9fff' else 1 for ch in tag)
+    if width >= tag_len:
+        div, mod = divmod((width -tag_len), 2)
         return f"{(div+mod)*'='}{tag}{div*'='}"
     else:
         return tag[:-2]  # Remove ' ='.
@@ -675,8 +676,8 @@ class ModifiedInterpreter(InteractiveInterpreter):
             code = compile(source, filename, "exec")
         except (OverflowError, SyntaxError):
             self.tkconsole.resetoutput()
-            print('*** Error in script or command!\n'
-                 'Traceback (most recent call last):',
+            print('*** 文件或命令产生错误!\n'
+                 '错误回溯 (最后的调用在最下方):',
                   file=self.tkconsole.stderr)
             InteractiveInterpreter.showsyntaxerror(self, filename)
             self.tkconsole.showprompt()
@@ -723,7 +724,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
         text = tkconsole.text
         text.tag_remove("ERROR", "1.0", "end")
         type, value, tb = sys.exc_info()
-        msg = getattr(value, 'msg', '') or value or "<no detail available>"
+        msg = getattr(value, 'msg', '') or value or "<没有详细信息>"
         lineno = getattr(value, 'lineno', '') or 1
         offset = getattr(value, 'offset', '') or 0
         if offset == 0:
@@ -735,7 +736,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
                   (lineno-1, offset-1)
         tkconsole.colorize_syntax_error(text, pos)
         tkconsole.resetoutput()
-        self.write("SyntaxError: %s\n" % msg)
+        self.write("语法错误: %s\n" % msg)
         tkconsole.showprompt()
 
     def showtraceback(self):
@@ -783,8 +784,8 @@ class ModifiedInterpreter(InteractiveInterpreter):
         except SystemExit:
             if not self.tkconsole.closing:
                 if messagebox.askyesno(
-                    "Exit?",
-                    "Do you want to exit altogether?",
+                    "退出？",
+                    "确定全部退出吗？",
                     default="yes",
                     parent=self.tkconsole.text):
                     raise
@@ -794,7 +795,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
                 raise
         except:
             if use_subprocess:
-                print("IDLE internal error in runcode()",
+                print("runcode() 时出现 IDLE 内部错误",
                       file=self.tkconsole.stderr)
                 self.showtraceback()
                 self.tkconsole.endexecuting()
@@ -817,35 +818,32 @@ class ModifiedInterpreter(InteractiveInterpreter):
 
     def display_port_binding_error(self):
         messagebox.showerror(
-            "Port Binding Error",
-            "IDLE can't bind to a TCP/IP port, which is necessary to "
-            "communicate with its Python execution server.  This might be "
-            "because no networking is installed on this computer.  "
-            "Run IDLE with the -n command line switch to start without a "
-            "subprocess and refer to Help/IDLE Help 'Running without a "
-            "subprocess' for further details.",
+            "端口绑定错误",
+            "IDLE 无法绑定到 TCP/IP 端口，必须要绑定到一个端口才能和 Python"
+            " 执行服务器通讯。这可能是因为这台电脑上没有安装网络设备。请使用"
+            "命令行参数 -n 以单进程模式启动 IDLE，并参考 IDLE 文档中的"
+            " \"无子进程运行\" 一节了解详情。",
             parent=self.tkconsole.text)
 
     def display_no_subprocess_error(self):
         messagebox.showerror(
-            "Subprocess Connection Error",
-            "IDLE's subprocess didn't make connection.\n"
-            "See the 'Startup failure' section of the IDLE doc, online at\n"
-            "https://docs.python.org/3/library/idle.html#startup-failure",
+            "子进程通信错误",
+            "IDLE 与子进程连接失败。\n"
+            "参见 IDLE 文档的 \"启动失败\" 一节，或访问\n"
+            "https://docs.python.org/zh-cn/3/library/idle.html#startup-failure",
             parent=self.tkconsole.text)
 
     def display_executing_dialog(self):
         messagebox.showerror(
-            "Already executing",
-            "The Python Shell window is already executing a command; "
-            "please wait until it is finished.",
+            "正在运行",
+            "Python 命令行窗口已经在运行一个命令，请等待它结束。",
             parent=self.tkconsole.text)
 
 
 class PyShell(OutputWindow):
     from idlelib.squeezer import Squeezer
 
-    shell_title = "IDLE Shell " + python_version()
+    shell_title = "IDLE 命令行 " + python_version()
 
     # Override classes
     ColorDelegator = ModifiedColorDelegator
@@ -853,22 +851,22 @@ class PyShell(OutputWindow):
 
     # Override menus
     menu_specs = [
-        ("file", "_File"),
-        ("edit", "_Edit"),
-        ("debug", "_Debug"),
-        ("options", "_Options"),
-        ("window", "_Window"),
-        ("help", "_Help"),
+        ("file", "文件(_F)"),
+        ("edit", "编辑(_E)"),
+        ("debug", "调试(_D)"),
+        ("options", "设置(_O)"),
+        ("window", "窗口(_W)"),
+        ("help", "帮助(_H)"),
     ]
 
     # Extend right-click context menu
     rmenu_specs = OutputWindow.rmenu_specs + [
-        ("Squeeze", "<<squeeze-current-text>>"),
+        ("折叠", "<<squeeze-current-text>>"),
     ]
     _idx = 1 + len(list(itertools.takewhile(
-        lambda rmenu_item: rmenu_item[0] != "Copy", rmenu_specs)
+        lambda rmenu_item: rmenu_item[0] != "复制", rmenu_specs)
     ))
-    rmenu_specs.insert(_idx, ("Copy with prompts",
+    rmenu_specs.insert(_idx, ("带提示符复制",
                               "<<copy-with-prompts>>",
                               "rmenu_check_copy"))
     del _idx
@@ -884,7 +882,7 @@ class PyShell(OutputWindow):
         if use_subprocess:
             ms = self.menu_specs
             if ms[2][0] != "shell":
-                ms.insert(2, ("shell", "She_ll"))
+                ms.insert(2, ("shell", "命令行(_L)"))
         self.interp = ModifiedInterpreter(self)
         if flist is None:
             root = Tk()
@@ -1040,8 +1038,8 @@ class PyShell(OutputWindow):
 
     def toggle_debugger(self, event=None):
         if self.executing:
-            messagebox.showerror("Don't debug now",
-                "You can only toggle the debugger when idle",
+            messagebox.showerror("无法进入调试",
+                "代码还在运行，请先停止再开启调试",
                 parent=self.text)
             self.set_debugger_indicator()
             return "break"
@@ -1067,7 +1065,7 @@ class PyShell(OutputWindow):
             if self.interp.rpcclt:
                 debugger_r.close_remote_debugger(self.interp.rpcclt)
             self.resetoutput()
-            self.console.write("[DEBUG OFF]\n")
+            self.console.write("[调试关闭]\n")
             self.prompt = self.sys_ps1
             self.showprompt()
         self.set_debugger_indicator()
@@ -1080,13 +1078,13 @@ class PyShell(OutputWindow):
             dbg_gui = debugger.Debugger(self)
         self.interp.setdebugger(dbg_gui)
         dbg_gui.load_breakpoints()
-        self.prompt = "[DEBUG ON]\n" + self.sys_ps1
+        self.prompt = "[调试开启]\n" + self.sys_ps1
         self.showprompt()
         self.set_debugger_indicator()
 
     def debug_menu_postcommand(self):
         state = 'disabled' if self.executing else 'normal'
-        self.update_menu_state('debug', '*tack*iewer', state)
+        self.update_menu_state('debug', '堆栈调试器*', state)
 
     def beginexecuting(self):
         "Helper for ModifiedInterpreter"
@@ -1103,8 +1101,8 @@ class PyShell(OutputWindow):
         "Extend EditorWindow.close()"
         if self.executing:
             response = messagebox.askokcancel(
-                "Kill?",
-                "Your program is still running!\n Do you want to kill it?",
+                "结束进程？",
+                "你的代码还在运行！\n确定要强制结束吗？",
                 default="ok",
                 parent=self.text)
             if response is False:
@@ -1138,7 +1136,7 @@ class PyShell(OutputWindow):
         return self.shell_title
 
     COPYRIGHT = \
-          'Type "help", "copyright", "credits" or "license()" for more information.'
+          '输入 "help", "copyright", "credits" 或 "license()" 获取更多信息.'
 
     def begin(self):
         self.text.mark_set("iomark", "insert")
@@ -1150,13 +1148,12 @@ class PyShell(OutputWindow):
                 self.close()
                 return False
         else:
-            nosub = ("==== No Subprocess ====\n\n" +
-                    "WARNING: Running IDLE without a Subprocess is deprecated\n" +
-                    "and will be removed in a later version. See Help/IDLE Help\n" +
-                    "for details.\n\n")
+            nosub = ("==== 单进程模式 ====\n\n" +
+                    "警告: 在单进程模式运行 IDLE 已被弃用，并且即将在后面的版本中移除。\n" +
+                    "详情见帮助和 IDLE 文档\n\n")
             sys.displayhook = rpc.displayhook
 
-        self.write("Python %s on %s\n%s\n%s" %
+        self.write("Python %s 运行于 %s 平台\n%s\n%s" %
                    (sys.version, sys.platform, self.COPYRIGHT, nosub))
         self.text.focus_force()
         self.showprompt()
@@ -1372,9 +1369,9 @@ class PyShell(OutputWindow):
         try:
             StackBrowser(self.root, sys.last_value, self.flist)
         except:
-            messagebox.showerror("No stack trace",
-                "There is no stack trace yet.\n"
-                "(sys.last_value is not defined)",
+            messagebox.showerror("没有堆栈跟踪",
+                "目前没有堆栈跟踪。\n"
+                "（sys.last_value 未定义）",
                 parent=self.text)
         return None
 
@@ -1466,56 +1463,53 @@ def fix_x11_paste(root):
 
 usage_msg = """\
 
-USAGE: idle  [-deins] [-t title] [file]*
-       idle  [-dns] [-t title] (-c cmd | -r file) [arg]*
-       idle  [-dns] [-t title] - [arg]*
+使用方法: idle  [-deins] [-t 标题] [文件]*
+          idle  [-dns] [-t 标题] (-c 命令 | -r 文件) [参数]*
+          idle  [-dns] [-t 标题] - [参数]*
 
-  -h         print this help message and exit
-  -n         run IDLE without a subprocess (DEPRECATED,
-             see Help/IDLE Help for details)
+  -h         输出该帮助信息并退出
+  -n         以单线程模式运行 IDLE (已弃用，详见帮助与文档)
 
-The following options will override the IDLE 'settings' configuration:
+以下选项比 IDLE 设置优先级高:
 
-  -e         open an edit window
-  -i         open a shell window
+  -e         打开编辑器窗口
+  -i         打开命令行窗口
 
-The following options imply -i and will open a shell:
+以下选项将自动指定 -i 打开命令行窗口:
 
-  -c cmd     run the command in a shell, or
-  -r file    run script from file
+  -c 命令    运行命令
+  -r 文件    运行脚本文件
 
-  -d         enable the debugger
-  -s         run $IDLESTARTUP or $PYTHONSTARTUP before anything else
+  -d         启用调试器
+  -s         在一切操作之前运行 $IDLESTARTUP 或 $PYTHONSTARTUP
   -t title   set title of shell window
 
-A default edit window will be bypassed when -c, -r, or - are used.
+当使用 -c, -r 或 - 时，默认打开编辑器窗口的设置会被忽略。
 
-[arg]* are passed to the command (-c) or script (-r) in sys.argv[1:].
+[参数]* 将会通过 sys.argv[1:] 传递给命令 (-c) 或脚本 (-r)。
 
-Examples:
+示例:
 
 idle
-        Open an edit window or shell depending on IDLE's configuration.
+        根据默认设置，打开编辑器或命令行窗口。
 
 idle foo.py foobar.py
-        Edit the files, also open a shell if configured to start with shell.
+        编辑这两个文件，如果设置为打开命令行，则也打开命令行。
 
 idle -est "Baz" foo.py
-        Run $IDLESTARTUP or $PYTHONSTARTUP, edit foo.py, and open a shell
-        window with the title "Baz".
+        运行 $IDLESTARTUP 或 $PYTHONSTARTUP，编辑 foo.py，并打开标题为 "Baz"
+        的命令行窗口。
 
 idle -c "import sys; print(sys.argv)" "foo"
-        Open a shell window and run the command, passing "-c" in sys.argv[0]
-        and "foo" in sys.argv[1].
+        打开命令行窗口运行命令，把 "-c" 传入 sys.argv[0]，"foo" 传入 sys.argv[1]。
 
 idle -d -s -r foo.py "Hello World"
-        Open a shell window, run a startup script, enable the debugger, and
-        run foo.py, passing "foo.py" in sys.argv[0] and "Hello World" in
-        sys.argv[1].
+        打开命令行窗口，运行启动脚本，启用调试器，运行 foo.py，把 "foo.py" 传入
+        sys.argv[0]，"Hello World" 传入 sys.argv[1]。
 
 echo "import sys; print(sys.argv)" | idle - "foobar"
-        Open a shell window, run the script piped in, passing '' in sys.argv[0]
-        and "foobar" in sys.argv[1].
+        打开命令行窗口，运行管道传入的脚本，把 '' 传入 sys.argv[0]， "foobar"
+        传入 sys.argv[1]。
 """
 
 def main():
@@ -1554,7 +1548,7 @@ def main():
         if o == '-i':
             enable_shell = True
         if o == '-n':
-            print(" Warning: running IDLE without a subprocess is deprecated.",
+            print(" 警告: 在单线程模式中运行 IDLE 的功能已弃用。",
                   file=sys.stderr)
             use_subprocess = False
         if o == '-r':
@@ -1562,7 +1556,7 @@ def main():
             if os.path.isfile(script):
                 pass
             else:
-                print("No script file: ", script)
+                print("不存在脚本文件: ", script)
                 sys.exit()
             enable_shell = True
         if o == '-s':

@@ -77,7 +77,7 @@ class SearchEngine:
         "Return compiled cooked search pattern."
         pat = self.getpat()
         if not pat:
-            self.report_error(pat, "Empty regular expression")
+            self.report_error(pat, "正则表达式为空")
             return None
         pat = self.getcookedpat()
         flags = 0
@@ -92,12 +92,12 @@ class SearchEngine:
 
     def report_error(self, pat, msg, col=None):
         # Derived class could override this with something fancier
-        msg = "Error: " + str(msg)
+        msg = "错误: " + str(msg)
         if pat:
-            msg = msg + "\nPattern: " + str(pat)
+            msg = msg + "\n模式: " + str(pat)
         if col is not None:
-            msg = msg + "\nOffset: " + str(col)
-        messagebox.showerror("Regular expression error",
+            msg = msg + "\n偏移: " + str(col)
+        messagebox.showerror("正则表达式错误",
                                msg, master=self.root)
 
     def search_text(self, text, prog=None, ok=0):

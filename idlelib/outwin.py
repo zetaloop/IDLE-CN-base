@@ -66,11 +66,11 @@ class OutputWindow(EditorWindow):
 
     # Our own right-button menu
     rmenu_specs = [
-        ("Cut", "<<cut>>", "rmenu_check_cut"),
-        ("Copy", "<<copy>>", "rmenu_check_copy"),
-        ("Paste", "<<paste>>", "rmenu_check_paste"),
+        ("剪切", "<<cut>>", "rmenu_check_cut"),
+        ("复制", "<<copy>>", "rmenu_check_copy"),
+        ("粘贴", "<<paste>>", "rmenu_check_paste"),
         (None, None, None),
-        ("Go to file/line", "<<goto-file-line>>", None),
+        ("转到该行", "<<goto-file-line>>", None),
     ]
 
     allow_code_context = False
@@ -86,7 +86,7 @@ class OutputWindow(EditorWindow):
 
     def short_title(self):
         "Customize EditorWindow title."
-        return "Output"
+        return "输出"
 
     def maybesave(self):
         "Customize EditorWindow to not display save file messagebox."
@@ -146,9 +146,8 @@ class OutputWindow(EditorWindow):
             result = file_line_helper(line)
             if not result:
                 self.showerror(
-                    "No special line",
-                    "The line you point at doesn't look like "
-                    "a valid file name followed by a line number.",
+                    "转到该行",
+                    "这一行结果不包含代码文件的路径+行号。",
                     parent=self.text)
                 return
         filename, lineno = result
