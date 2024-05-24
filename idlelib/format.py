@@ -345,8 +345,8 @@ class FormatRegion:
     def _asktabwidth(self):
         "Return value for tab width."
         return askinteger(
-            "Tab width",
-            "Columns per tab? (2-16)",
+            "设置缩进宽度",
+            "缩进宽度（2-16）",
             parent=self.editwin.text,
             initialvalue=self.editwin.indentwidth,
             minvalue=2,
@@ -363,11 +363,11 @@ class Indents:
         editwin = self.editwin
         usetabs = editwin.usetabs
         if askyesno(
-              "Toggle tabs",
-              "Turn tabs " + ("on", "off")[usetabs] +
-              "?\nIndent width " +
-              ("will be", "remains at")[usetabs] + " 8." +
-              "\n Note: a tab is always 8 columns",
+              "缩进类型",
+              "改为使用" + ("制表符", "空格")[usetabs] +
+              "？\n缩进宽度" +
+              ("将会改为", "仍为")[usetabs] + "8。" +
+              "\n注意：一个制表符宽度恒为8个字符",
               parent=editwin.text):
             editwin.usetabs = not usetabs
             # Try to prevent inconsistent indentation.
@@ -378,8 +378,8 @@ class Indents:
     def change_indentwidth_event(self, event):
         editwin = self.editwin
         new = askinteger(
-                  "Indent width",
-                  "New indent width (2-16)\n(Always use 8 when using tabs)",
+                  "设置缩进宽度",
+                  "缩进宽度（2-16）\n（用制表符缩进时宽度固定为8）",
                   parent=editwin.text,
                   initialvalue=editwin.indentwidth,
                   minvalue=2,

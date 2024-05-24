@@ -51,8 +51,8 @@ except NameError: # In case subprocess started with -S (maybe in future).
 def idle_formatwarning(message, category, filename, lineno, line=None):
     """Format warnings the IDLE way."""
 
-    s = "\nWarning (from warnings module):\n"
-    s += f'  File \"{filename}\", line {lineno}\n'
+    s = "\n警告（来自警告模块）:\n"
+    s += f'  文件 \"{filename}\", 第{lineno}行\n'
     if line is None:
         line = linecache.getline(filename, lineno)
     line = line.strip()
@@ -134,7 +134,7 @@ def main(del_exitfunc=False):
         assert(len(sys.argv) > 1)
         port = int(sys.argv[-1])
     except:
-        print("IDLE Subprocess: no IP port passed in sys.argv.",
+        print("IDLE 子进程: 没有 IP 端口传入 sys.argv。",
               file=sys.__stderr__)
         return
 
@@ -192,12 +192,12 @@ def manage_socket(address):
             server = MyRPCServer(address, MyHandler)
             break
         except OSError as err:
-            print("IDLE Subprocess: OSError: " + err.args[1] +
-                  ", retrying....", file=sys.__stderr__)
+            print("IDLE 子进程: OSError: " + err.args[1] +
+                  ", 重试....", file=sys.__stderr__)
             socket_error = err
     else:
-        print("IDLE Subprocess: Connection to "
-              "IDLE GUI failed, exiting.", file=sys.__stderr__)
+        print("IDLE 子进程: 无法连接到"
+              "IDLE GUI，正在退出。", file=sys.__stderr__)
         show_socket_error(socket_error, address)
         global exit_now
         exit_now = True
@@ -212,11 +212,11 @@ def show_socket_error(err, address):
     fix_scaling(root)
     root.withdraw()
     showerror(
-            "Subprocess Connection Error",
-            f"IDLE's subprocess can't connect to {address[0]}:{address[1]}.\n"
-            f"Fatal OSError #{err.errno}: {err.strerror}.\n"
-            "See the 'Startup failure' section of the IDLE doc, online at\n"
-            "https://docs.python.org/3/library/idle.html#startup-failure",
+            "子进程连接错误",
+            f"子进程无法连接到 {address[0]}:{address[1]}。\n"
+            f"致命的 OSError #{err.errno}: {err.strerror}。\n"
+            "参见 IDLE 文档的 '启动失败' 一节，或访问\n"
+            "https://docs.python.org/zh-cn/3/library/idle.html#startup-failure",
             parent=root)
     root.destroy()
 
@@ -249,17 +249,15 @@ def print_exception():
         cause = exc.__cause__
         if cause is not None and id(cause) not in seen:
             print_exc(type(cause), cause, cause.__traceback__)
-            print("\nThe above exception was the direct cause "
-                  "of the following exception:\n", file=efile)
+            print("\n上述异常直接导致了以下异常:\n", file=efile)
         elif (context is not None and
               not exc.__suppress_context__ and
               id(context) not in seen):
             print_exc(type(context), context, context.__traceback__)
-            print("\nDuring handling of the above exception, "
-                  "another exception occurred:\n", file=efile)
+            print("\n上述异常的处理过程中，又发生了异常:\n", file=efile)
         if tb:
             tbe = traceback.extract_tb(tb)
-            print('Traceback (most recent call last):', file=efile)
+            print('错误回溯 (最后的调用在最下方):', file=efile)
             exclude = ("run.py", "rpc.py", "threading.py", "queue.py",
                        "debugger_r.py", "bdb.py")
             cleanup_traceback(tbe, exclude)
@@ -290,7 +288,7 @@ def cleanup_traceback(tb, exclude):
     if len(tb) == 0:
         # exception was in IDLE internals, don't prune!
         tb[:] = orig_tb[:]
-        print("** IDLE Internal Exception: ", file=sys.stderr)
+        print("** IDLE 内部异常: ", file=sys.stderr)
     rpchandler = rpc.objecttable['exec'].rpchandler
     for i in range(len(tb)):
         fn, ln, nm, line = tb[i]
@@ -413,18 +411,18 @@ class MyRPCServer(rpc.RPCServer):
             erf = sys.__stderr__
             print(textwrap.dedent(f"""
             {'-'*40}
-            Unhandled exception in user code execution server!'
-            Thread: {threading.current_thread().name}
-            IDLE Client Address: {client_address}
-            Request: {request!r}
+            用户代码执行服务器中发生未处理异常!'
+            线程: {threading.current_thread().name}
+            IDLE 客户端地址: {client_address}
+            请求: {request!r}
             """), file=erf)
             traceback.print_exc(limit=-20, file=erf)
             print(textwrap.dedent(f"""
-            *** Unrecoverable, server exiting!
+            *** 无法恢复，服务器退出!
 
-            Users should never see this message; it is likely transient.
-            If this recurs, report this with a copy of the message
-            and an explanation of how to make it repeat.
+            用户不应看到此消息，这可能只是暂时的问题。
+            如果这个问题多次发生，请报告此消息的副本，
+            并描述如何重现该问题。
             {'-'*40}"""), file=erf)
             quitting = True
             thread.interrupt_main()

@@ -24,9 +24,9 @@ class ZoomHeight:
         if zoomed is None:
             self.top.bell()
         else:
-            menu_status = 'Restore' if zoomed else 'Zoom'
-            self.editwin.update_menu_label(menu='options', index='* Height',
-                                           label=f'{menu_status} Height')
+            menu_status = '恢复' if zoomed else '最大化'
+            self.editwin.update_menu_label(menu='options', index='*窗口高度*',
+                                           label=f'{menu_status}窗口高度(Z)')
 
         return "break"
 
@@ -72,8 +72,7 @@ class ZoomHeight:
                 # The 'zoomed' state is not supported by some esoteric WMs,
                 # such as Xvfb.
                 raise WmInfoGatheringError(
-                    'Failed getting geometry of maximized windows, because ' +
-                    'the "zoomed" window state is unavailable.')
+                    '无法获取窗口的几何信息，因为最大化窗口的信息不可用。')
             top.update()
             maxwidth, maxheight, maxx, maxy = get_window_geometry(top)
             if sys.platform == 'win32':
