@@ -133,8 +133,8 @@ class ModuleBrowser:
 
     def settitle(self):
         "Set the window title."
-        self.top.wm_title("Module Browser - " + os.path.basename(self.path))
-        self.top.wm_iconname("Module Browser")
+        self.top.wm_title("模块查看器 - " + os.path.basename(self.path))
+        self.top.wm_iconname("模块查看器")
 
     def rootnode(self):
         "Return a ModuleBrowserTreeItem as the root of the tree."
