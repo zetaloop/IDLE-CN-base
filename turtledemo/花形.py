@@ -1,24 +1,21 @@
-"""      turtle-example-suite:
+"""     海龟画图演示套装:
 
-          tdemo_wikipedia3.py
+             花形.py
 
-This example is
-inspired by the Wikipedia article on turtle
-graphics. (See example wikipedia1 for URLs)
+该例灵感来自维基百科关于海龟画图的文章。
 
-First we create (ne-1) (i.e. 35 in this
-example) copies of our first turtle p.
-Then we let them perform their steps in
-parallel.
+首先，我们创建 (n-1) 个（这里是35个）
+原本的海龟 p 的副本。
+然后让它们并行执行各自的动作。
 
-Followed by a complete undo().
+最后把所有操作完全撤销。
 """
 from turtle import Screen, Turtle, mainloop
 from time import perf_counter as clock, sleep
 
 def mn_eck(p, ne,sz):
     turtlelist = [p]
-    #create ne-1 additional turtles
+    # 创建 ne-1 个新的海龟
     for i in range(1,ne):
         q = p.clone()
         q.rt(360.0/ne)
@@ -26,8 +23,7 @@ def mn_eck(p, ne,sz):
         p = q
     for i in range(ne):
         c = abs(ne/2.0-i)/(ne*.7)
-        # let those ne turtles make a step
-        # in parallel:
+        # 让这 ne 个海龟并行执行一步:
         for t in turtlelist:
             t.rt(360./ne)
             t.pencolor(1-c,0,c)
@@ -56,7 +52,7 @@ def main():
         for t in s.turtles():
             t.undo()
     et = clock()
-    return "runtime: %.3f sec" % (z1+et-at)
+    return "运行时间: %.3f 秒" % (z1+et-at)
 
 
 if __name__ == '__main__':
