@@ -228,7 +228,7 @@ class HelpFrame(Frame):
 
     def toc_menu(self, text):
         "Create table of contents as drop-down menu."
-        toc = Menubutton(self, text='TOC')
+        toc = Menubutton(self, text='目录')
         drop = Menu(toc, tearoff=False)
         for lbl, dex in text.parser.toc:
             drop.add_command(label=lbl, command=lambda dex=dex:text.yview(dex))
@@ -282,7 +282,7 @@ def copy_strip():  # pragma: no cover
             if '<div class="clearer">' in line: break
             if copy: out.write(line.strip() + '\n')
 
-    print(f'{src} copied to {dst}')
+    print(f'{src} 已复制到 {dst}')
 
 
 def show_idlehelp(parent):
@@ -291,7 +291,7 @@ def show_idlehelp(parent):
     if not isfile(filename):  # pragma: no cover
         # Try copy_strip, present message.
         return
-    return HelpWindow(parent, filename, 'IDLE Doc (%s)' % python_version())
+    return HelpWindow(parent, filename, 'IDLE 文档 (%s)' % python_version())
 
 
 def _get_dochome():
@@ -332,7 +332,7 @@ def _get_dochome():
             return 'file://' + dochome
         return dochome
     else:
-        return "https://docs.python.org/%d.%d/" % sys.version_info[:2]
+        return "https://docs.python.org/zh-cn/%d.%d/" % sys.version_info[:2]
 
 
 if __name__ == '__main__':
