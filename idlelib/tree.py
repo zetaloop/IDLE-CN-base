@@ -32,7 +32,7 @@ except NameError:
 if os.path.isdir(_icondir):
     ICONDIR = _icondir
 elif not os.path.isdir(ICONDIR):
-    raise RuntimeError(f"can't find icon directory ({ICONDIR!r})")
+    raise RuntimeError(f"找不到图标目录 ({ICONDIR!r})")
 
 def listicons(icondir=ICONDIR):
     """Utility to display the available icons."""
@@ -264,7 +264,7 @@ class TreeNode:
             self.canvas.tag_bind(id, "<Double-1>", self.flip)
             x0, y0, x1, y1 = self.canvas.bbox(id)
             textx = max(x1, 200) + 10
-        text = self.item.GetText() or "<no text>"
+        text = self.item.GetText() or "<无文本>"
         try:
             self.entry
         except AttributeError:
