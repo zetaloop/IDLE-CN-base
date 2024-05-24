@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
-"""       turtle-example-suite:
+"""     海龟画图演示套装:
 
-        tdemo_planets_and_moon.py
+           行星系统.py
 
-Gravitational system simulation using the
-approximation method from Feynman-lectures,
-p.9-8, using turtlegraphics.
+引力系统模拟，采用了费曼讲座第9-8页的方法，
+通过海龟图形实现。
 
-Example: heavy central body, light planet,
-very light moon!
-Planet has a circular orbit, moon a stable
-orbit around the planet.
+比如：很重的中心天体、比较轻的行星、
+还有特别轻的卫星！行星有圆形的轨道，
+卫星有稳定围绕行星旋转的轨道。
 
-You can hold the movement temporarily by
-pressing the left mouse button with the
-mouse over the scrollbar of the canvas.
+你可以在画布的滚动条上按住左键来暂停。
 
 """
 from turtle import Shape, Turtle, mainloop, Vec2D as Vec
@@ -65,7 +61,7 @@ class Star(Turtle):
         self.a = self.acc()
         self.v = self.v + dt*self.a
 
-## create compound yellow/blue turtleshape for planets
+## 创建黄蓝色结合的行星形状
 
 def main():
     s = Turtle()
@@ -90,7 +86,7 @@ def main():
     s.getscreen().register_shape("planet", planetshape)
     s.getscreen().tracer(1,0)
 
-    ## setup gravitational system
+    ## 设置引力系统
     gs = GravSys()
     sun = Star(1000000, Vec(0,0), Vec(0,-2.5), gs, "circle")
     sun.color("yellow")
@@ -104,7 +100,7 @@ def main():
     moon.shapesize(0.5)
     gs.init()
     gs.start()
-    return "Done!"
+    return "完成!"
 
 if __name__ == '__main__':
     main()
