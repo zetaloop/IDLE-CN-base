@@ -360,6 +360,10 @@ class EditorWindow:
         else:
             self.update_menu_state('options', '*行号*', 'disabled')
 
+        # Rebind F-keys for Chinese IME fix
+        if hasattr(self, '_rebind_f_keys'):
+            self.text.after_idle(self._rebind_f_keys)
+
     def handle_winconfig(self, event=None):
         self.set_width()
 
@@ -861,6 +865,8 @@ class EditorWindow:
         "Remove the keybindings before they are changed."
         # Called from configdialog.py
         self.mainmenu.default_keydefs = keydefs = idleConf.GetCurrentKeySet()
+        if sys.platform.startswith('win'): # Fix Chinese input bug
+            keydefs = {event: keylist_filtered for event, keylist in keydefs.items() if (keylist_filtered := [key for key in keylist if not key.startswith('<Key-F')])}
         for event, keylist in keydefs.items():
             self.text.event_delete(event, *keylist)
         for extensionName in self.get_standard_extension_names():
@@ -1161,6 +1167,81 @@ class EditorWindow:
             keydefs = self.mainmenu.default_keydefs
         text = self.text
         text.keydefs = keydefs
+
+        if sys.platform.startswith('win'): # Fix Chinese input bug
+            import time
+            last_special_key_time = 0
+            false_key_map = {
+                # '1': 'a',
+                # '2': 'b',
+                # '3': 'c',
+                # '4': 'd',
+                # '5': 'e',
+                # '6': 'f',
+                # '7': 'g',
+                # '8': 'h',
+                # '9': 'i',
+                # 'asterisk': 'j',
+                # 'plus': 'k',
+                # '??': 'l',  # Unknown key
+                # 'minus': 'm',
+                # 'period': 'n',
+                # '': 'o',  # Nothing to map
+                'F1': 'p',
+                'F2': 'q',
+                'F3': 'r',
+                'F4': 's',
+                'F5': 't',
+                'F6': 'u',
+                'F7': 'v',
+                'F8': 'w',
+                'F9': 'x',
+                'F10': 'y',
+                'F11': 'z'
+            }
+            f_key_events_map = {}
+
+            def handle_special_key(event):
+                # print(f'Press {event.keysym}')
+                nonlocal last_special_key_time
+                nonlocal f_key_events_map
+                if event.keysym == '??':  # Triggered by Chinese IME
+                    last_special_key_time = time.time()
+                    # print(f'Pressed ??, time: {last_special_key_time}')
+                elif event.keysym in false_key_map:
+                    if time.time() - last_special_key_time < 0.3:
+                        text.event_generate(f'<KeyPress-{false_key_map[event.keysym]}>')
+                        return 'break'
+                    else:
+                        # print(f_key_events_map, f'Press {event.keysym}')
+                        if event.keysym in f_key_events_map:
+                            text.event_generate(f_key_events_map[event.keysym])
+            text.bind('<KeyPress>', handle_special_key)
+            # self.text.bind('<KeyPress>', lambda event: print(f'Press {event.keysym}'))
+            # self.text.bind('<KeyRelease>', lambda event: print(f'Release {event.keysym}'))
+            # self.text.bind('<Key>', lambda event: print(f'Key {event.keysym}'))
+
+            # for event, keylist in keydefs.items():
+            #     if keylist:
+            #         keylist_filtered = keylist
+            #         if any(key.startswith('<Key-F') for key in keylist):
+            #             f_key_events_map.update({key[5:-1]: event for key in keylist if key.startswith('<Key-F')})
+            #             keylist_filtered = [key for key in keylist if not key.startswith('<Key-F')]
+            #         if keylist_filtered:
+            #             text.event_add(event, *keylist_filtered)
+
+            def rebind_f_keys():
+                """Re-bind F-keys after MultiCall initialization completes."""
+                for fkey in false_key_map.keys():
+                    text.bind(f'<KeyPress-{fkey}>', handle_special_key)
+                    text.bind(f'<Key-{fkey}>', handle_special_key)
+
+            self._rebind_f_keys = rebind_f_keys
+            rebind_f_keys()
+
+            f_key_events_map.update({key[5:-1]: event for event, keylist in keydefs.items() for key in keylist if key.startswith('<Key-F')})
+            keydefs = {event: keylist_filtered for event, keylist in keydefs.items() if (keylist_filtered := [key for key in keylist if not key.startswith('<Key-F')])}
+
         for event, keylist in keydefs.items():
             if keylist:
                 text.event_add(event, *keylist)
