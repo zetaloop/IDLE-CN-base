@@ -1,6 +1,6 @@
-"""turtledemo/chaos.py
+"""turtledemo/混乱.py
 
-A demonstration of chaos.
+一个混乱的演示。
 """
 from turtle import *
 
@@ -50,7 +50,7 @@ def main():
     # Now zoom in:
     for s in range(100):
         setworldcoordinates(0.5*s,-0.1, N+1, 1.1)
-    return "Done!"
+    return "完成!"
 
 if __name__ == "__main__":
     main()

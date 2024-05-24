@@ -1,9 +1,8 @@
-"""turtledemo/peace.py
+"""turtledemo/和平旗.py
 
-A simple drawing suitable as a beginner's
-programming example. Aside from the
-peacecolors assignment and the for loop,
-it only uses turtle commands.
+一个适合初学者的编程画图示例。
+除了和平颜色的赋值和 for 循环，
+其他就只用了基本的海龟命令。
 """
 
 from turtle import *
@@ -50,8 +49,8 @@ def main():
     forward(170)
     up()
 
-    goto(0,300) # vanish if hideturtle() is not available ;-)
-    return "Done!"
+    goto(0,300) # 即使 hideturtle() 不可用，也可以让海龟消失 ;-)
+    return "完成!"
 
 if __name__ == "__main__":
     main()

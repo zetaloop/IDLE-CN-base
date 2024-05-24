@@ -1,51 +1,49 @@
-"""turtledemo/fractalcurves.py
+"""turtledemo/分形曲线.py
 
-This program draws two fractal-curve-designs:
-(1) A hilbert curve (in a box)
-(2) A combination of Koch-curves.
+本程序绘制两种分形曲线设计:
+(1) 一个希尔伯特曲线（在一个方框中）
+(2) 一个科赫曲线的组合。
 
-The CurvesTurtle class and the fractal-curve-
-methods are taken from the PythonCard example
-scripts for turtle-graphics.
+CurvesTurtle 类和分形曲线方法
+取自 PythonCard 的海龟画图脚本。
 """
 from turtle import *
 from time import sleep, perf_counter as clock
 
 class CurvesTurtle(Pen):
-    # example derived from
-    # Turtle Geometry: The Computer as a Medium for Exploring Mathematics
-    # by Harold Abelson and Andrea diSessa
-    # p. 96-98
+    # 示例来源于
+    # 海龟图形学：用计算机探索数学
+    # 作者 Harold Abelson 和 Andrea diSessa
+    # 第96-98页
     def hilbert(self, size, level, parity):
         if level == 0:
             return
-        # rotate and draw first subcurve with opposite parity to big curve
+        # 旋转并绘制第一个子曲线，与大曲线的奇偶性相反
         self.left(parity * 90)
         self.hilbert(size, level - 1, -parity)
-        # interface to and draw second subcurve with same parity as big curve
+        # 连接并绘制第二个子曲线，与大曲线的奇偶性相同
         self.forward(size)
         self.right(parity * 90)
         self.hilbert(size, level - 1, parity)
-        # third subcurve
+        # 第三个子曲线
         self.forward(size)
         self.hilbert(size, level - 1, parity)
-        # fourth subcurve
+        # 第四个子曲线
         self.right(parity * 90)
         self.forward(size)
         self.hilbert(size, level - 1, -parity)
-        # a final turn is needed to make the turtle
-        # end up facing outward from the large square
+        # 最终需要旋转一下，让海龟面向大方块外部
         self.left(parity * 90)
 
-    # Visual Modeling with Logo: A Structural Approach to Seeing
-    # by James Clayson
-    # Koch curve, after Helge von Koch who introduced this geometric figure in 1904
-    # p. 146
+    # Logo 语言视觉建模：结构化的视角
+    # 作者 James Clayson
+    # 科赫曲线，按照 Helge von Koch 在1904年引入的几何图形
+    # 第146页
     def fractalgon(self, n, rad, lev, dir):
         import math
 
-        # if dir = 1 turn outward
-        # if dir = -1 turn inward
+        # 若 dir = 1 向外转
+        # 若 dir = -1 向内转
         edge = 2 * rad * math.sin(math.pi / n)
         self.pu()
         self.fd(rad)
@@ -59,7 +57,7 @@ class CurvesTurtle(Pen):
         self.bk(rad)
         self.pd()
 
-    # p. 146
+    # 第146页
     def fractal(self, dist, depth, dir):
         if depth < 1:
             self.fd(dist)
@@ -107,7 +105,7 @@ def main():
         ft.rt(90)
     ft.end_fill()
     tb=clock()
-    res =  "Hilbert: %.2fsec. " % (tb-ta)
+    res =  "希尔伯特曲线: %.2f 秒。" % (tb-ta)
 
     sleep(3)
 
@@ -126,7 +124,7 @@ def main():
     ft.fractalgon(3, 200, 4, -1)
     ft.end_fill()
     tb=clock()
-    res +=  "Koch: %.2fsec." % (tb-ta)
+    res +=  "科赫曲线: %.2f 秒。" % (tb-ta)
     return res
 
 if __name__  == '__main__':

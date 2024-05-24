@@ -1,15 +1,13 @@
-"""turtledemo/minimal_hanoi.py
+"""turtledemo/极简汉诺塔.py
 
-A minimal 'Towers of Hanoi' animation:
-A tower of 6 discs is transferred from the
-left to the right peg.
+一个极简的汉诺塔动画：
+六个盘从左边柱子转移到右边柱子。
 
-An imho quite elegant and concise
-implementation using a tower class, which
-is derived from the built-in type list.
+个人认为这是一个相当简洁优雅的实现，
+它采用一个继承内置列表类的塔类。
 
-Discs are turtles with shape "square", but
-stretched to rectangles by shapesize()
+盘片其实是方形的海龟，
+通过 shapesize() 拉伸成长方形。
 """
 from turtle import *
 
@@ -22,9 +20,9 @@ class Disc(Turtle):
         self.st()
 
 class Tower(list):
-    "Hanoi tower, a subclass of built-in type list"
+    "汉诺塔，内置 list 类的子类"
     def __init__(self, x):
-        "create an empty tower. x is x-position of peg"
+        "创建一个空的塔，x 是柱子的 x 坐标"
         self.x = x
     def push(self, d):
         d.setx(self.x)
@@ -46,23 +44,23 @@ def play():
     clear()
     try:
         hanoi(6, t1, t2, t3)
-        write("press STOP button to exit",
-              align="center", font=("Courier", 16, "bold"))
+        write("点击停止按钮退出",
+              align="center", font=("Microsoft YaHei", 16, "bold"))
     except Terminator:
-        pass  # turtledemo user pressed STOP
+        pass  # 用户按下停止
 
 def main():
     global t1, t2, t3
-    ht(); penup(); goto(0, -225)   # writer turtle
+    ht(); penup(); goto(0, -225)   # 负责写字的海龟
     t1 = Tower(-250)
     t2 = Tower(0)
     t3 = Tower(250)
-    # make tower of 6 discs
+    # 准备一个六层的塔
     for i in range(6,0,-1):
         t1.push(Disc(i))
-    # prepare spartanic user interface ;-)
-    write("press spacebar to start game",
-          align="center", font=("Courier", 16, "bold"))
+    # 准备一个简单的用户界面 ;-)
+    write("按下空格开始动画",
+          align="center", font=("Microsoft YaHei", 16, "bold"))
     onkey(play, "space")
     listen()
     return "EVENTLOOP"
