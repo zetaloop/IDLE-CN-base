@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: cp1252 -*-
-"""       turtle-example-suite:
+"""   海龟画图演示套装:
 
-             tdemo_clock.py
+           时钟.py
 
-Enhanced clock-program, showing date
-and time
-  ------------------------------------
-   Press STOP to exit the program!
-  ------------------------------------
+增强版时钟程序，显示日期和时间
+  --------------------------
+   点击停止按钮来退出程序！
+  --------------------------
 """
 from turtle import *
 from datetime import datetime
@@ -81,17 +79,15 @@ def setup():
     writer.bk(85)
 
 def wochentag(t):
-    wochentag = ["Monday", "Tuesday", "Wednesday",
-        "Thursday", "Friday", "Saturday", "Sunday"]
+    wochentag = ["周一", "周二", "周三",
+        "周四", "周五", "周六", "周日"]
     return wochentag[t.weekday()]
 
 def datum(z):
-    monat = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June",
-             "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."]
     j = z.year
-    m = monat[z.month - 1]
+    m = z.month
     t = z.day
-    return "%s %d %d" % (m, t, j)
+    return "%d年%d月%d日" % (j, m, t)
 
 def tick():
     t = datetime.today()
@@ -99,24 +95,24 @@ def tick():
     minute = t.minute + sekunde/60.0
     stunde = t.hour + minute/60.0
     try:
-        tracer(False)  # Terminator can occur here
+        writer.home()  # 将这一行移到前面，修复时钟文字不消失的问题
+        tracer(False)  # Terminator 异常可能在这里被引发
         writer.clear()
-        writer.home()
         writer.forward(65)
         writer.write(wochentag(t),
-                     align="center", font=("Courier", 14, "bold"))
+                     align="center", font=("Microsoft YaHei", 14, "bold"))
         writer.back(150)
         writer.write(datum(t),
-                     align="center", font=("Courier", 14, "bold"))
+                     align="center", font=("Microsoft YaHei", 14, "bold"))
         writer.forward(85)
         tracer(True)
-        second_hand.setheading(6*sekunde)  # or here
+        second_hand.setheading(6*sekunde)  # 或这里
         minute_hand.setheading(6*minute)
         hour_hand.setheading(30*stunde)
         tracer(True)
         ontimer(tick, 100)
     except Terminator:
-        pass  # turtledemo user pressed STOP
+        pass  # 用户点击了停止按钮，引发了这个异常
 
 def main():
     tracer(False)
