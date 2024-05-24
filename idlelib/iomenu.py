@@ -132,10 +132,10 @@ class IOBinding:
                 # Wait for the editor window to appear
                 self.editwin.text.update()
                 enc = askstring(
-                    "Specify file encoding",
-                    "The file's encoding is invalid for Python 3.x.\n"
-                    "IDLE will convert it to UTF-8.\n"
-                    "What is the current encoding of the file?",
+                    "请指定文件编码",
+                    "当前文件的编码在 Python 3.x 无效，\n"
+                    "IDLE 将会把它转换成 UTF-8 编码。\n"
+                    "请问这个文件当前是什么编码？",
                     initialvalue='utf-8',
                     parent=self.editwin.text)
                 with open(filename, encoding=enc) as f:
@@ -144,11 +144,11 @@ class IOBinding:
                     eol_convention = f.newlines
                     converted = True
         except OSError as err:
-            messagebox.showerror("I/O Error", str(err), parent=self.text)
+            messagebox.showerror("文件输入输出错误", str(err), parent=self.text)
             return False
         except UnicodeDecodeError:
-            messagebox.showerror("Decoding Error",
-                                   "File %s\nFailed to Decode" % filename,
+            messagebox.showerror("解码错误",
+                                   "文件 %s\n无法解码" % filename,
                                    parent=self.text)
             return False
 
@@ -156,9 +156,9 @@ class IOBinding:
             # If the file does not contain line separators, it is None.
             # If the file contains mixed line separators, it is a tuple.
             if eol_convention is not None:
-                messagebox.showwarning("Mixed Newlines",
-                                         "Mixed newlines detected.\n"
-                                         "The file will be changed on save.",
+                messagebox.showwarning("混用换行符",
+                                         "检测到混用不同的换行符。\n"
+                                         "文件换行符将在下次保存的时候被统一。",
                                          parent=self.text)
                 converted = True
             eol_convention = os.linesep  # default
@@ -187,11 +187,11 @@ class IOBinding:
         """
         if self.get_saved():
             return "yes"
-        message = ("Do you want to save "
-                   f"{self.filename or 'this untitled document'}"
-                   " before closing?")
+        message = ("即将关闭编辑器，是否要保存" +
+                   (f' "{self.filename}" ' if self.filename else "这个未命名的文件") +
+                   "？")
         confirm = messagebox.askyesnocancel(
-                  title="Save On Close",
+                  title="关闭时保存",
                   message=message,
                   default=messagebox.YES,
                   parent=self.text)
@@ -247,7 +247,7 @@ class IOBinding:
                 os.fsync(f.fileno())
             return True
         except OSError as msg:
-            messagebox.showerror("I/O Error", str(msg),
+            messagebox.showerror("文件输入输出错误", str(msg),
                                    parent=self.text)
             return False
 
@@ -289,10 +289,10 @@ class IOBinding:
         except SyntaxError as err:
             failed = str(err)
         except UnicodeEncodeError:
-            failed = "Invalid encoding '%s'" % enc
+            failed = "无效编码 '%s'" % enc
         messagebox.showerror(
-            "I/O Error",
-            "%s.\nSaving as UTF-8" % failed,
+            "文件输入输出错误",
+            "%s。\n保存为 UTF-8 编码" % failed,
             parent=self.text)
         # Fallback: save as UTF-8, with BOM - ignoring the incorrect
         # declared encoding
@@ -300,8 +300,8 @@ class IOBinding:
 
     def print_window(self, event):
         confirm = messagebox.askokcancel(
-                  title="Print",
-                  message="Print to Default Printer",
+                  title="打印",
+                  message="用默认打印机打印",
                   default=messagebox.OK,
                   parent=self.text)
         if not confirm:
@@ -336,14 +336,14 @@ class IOBinding:
             output = pipe.read().strip()
             status = pipe.close()
             if status:
-                output = "Printing failed (exit status 0x%x)\n" % \
+                output = "打印失败（退出状态码 0x%x）\n" % \
                          status + output
             if output:
-                output = "Printing command: %s\n" % repr(command) + output
-                messagebox.showerror("Print status", output, parent=self.text)
+                output = "打印命令: %s\n" % repr(command) + output
+                messagebox.showerror("打印状态", output, parent=self.text)
         else:  #no printing for this platform
-            message = "Printing is not enabled for this platform: %s" % platform
-            messagebox.showinfo("Print status", message, parent=self.text)
+            message = "该系统上不支持打印功能: %s" % platform
+            messagebox.showinfo("打印状态", message, parent=self.text)
         if tempfilename:
             os.unlink(tempfilename)
         return "break"
@@ -352,9 +352,9 @@ class IOBinding:
     savedialog = None
 
     filetypes = (
-        ("Python files", py_extensions, "TEXT"),
-        ("Text files", "*.txt", "TEXT"),
-        ("All files", "*"),
+        ("Python 文件", py_extensions, "TEXT"),
+        ("文本文件", "*.txt", "TEXT"),
+        ("所有文件", "*"),
         )
 
     defaultextension = '.py' if sys.platform == 'darwin' else ''
