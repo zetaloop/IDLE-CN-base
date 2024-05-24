@@ -1,7 +1,7 @@
 # IDLE reads several config files to determine user preferences.  This
 # file is the default config file for idle highlight theme settings.
 
-[IDLE Classic]
+[IDLE 经典]
 normal-foreground= #000000
 normal-background= #ffffff
 keyword-foreground= #ff7700
@@ -36,7 +36,7 @@ stderr-background= #ffffff
 console-foreground= #770000
 console-background= #ffffff
 
-[IDLE New]
+[IDLE 新式]
 normal-foreground= #000000
 normal-background= #ffffff
 keyword-foreground= #ff7700
@@ -71,7 +71,7 @@ stderr-background= #ffffff
 console-foreground= #770000
 console-background= #ffffff
 
-[IDLE Dark]
+[IDLE 暗色]
 comment-foreground = #dd0000
 console-foreground = #ff4d4d
 error-foreground = #FFFFFF
