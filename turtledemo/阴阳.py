@@ -1,10 +1,8 @@
-"""turtledemo/yinyang.py
+"""turtledemo/阴阳.py
 
-Another drawing suitable as a beginner's
-programming example.
+另一个适合初学者的编程画图示例。
 
-The small circles are drawn by the circle
-command.
+小圆圈使用 circle 命令绘制。
 
 """
 
@@ -39,7 +37,7 @@ def main():
     yin(200, "black", "white")
     yin(200, "white", "black")
     ht()
-    return "Done!"
+    return "完成!"
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,4 @@
-"""turtledemo/colormixer.py"""
+"""turtledemo/颜色混合器.py"""
 from turtle import Screen, Turtle, mainloop
 
 class ColorTurtle(Turtle):
@@ -48,7 +48,7 @@ def main():
     writer.ht()
     writer.pu()
     writer.goto(1,1.15)
-    writer.write("DRAG!",align="center",font=("Arial",30,("bold","italic")))
+    writer.write("拖动!",align="center",font=("Microsoft YaHei",30,("bold","italic")))
     return "EVENTLOOP"
 
 if __name__ == "__main__":

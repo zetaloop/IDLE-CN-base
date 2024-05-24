@@ -1,13 +1,13 @@
-"""turtledemo/sorting_animation.py
+"""turtledemo/排序动画.py
 
-A minimal sorting algorithm animation:
-Sorts a shelf of 10 blocks using insertion
-sort, selection sort and quicksort.
+一个简单的排序算法动画：
+用插入排序、选择排序和快速排序
+对架子上的10个方块排序。
 
-Shelves are implemented using builtin lists.
+架子使用内置列表实现。
 
-Blocks are turtles with shape "square", but
-stretched to rectangles by shapesize()
+方块是形状为正方形的海龟，
+通过 shapesize() 拉伸成长方形。
 """
 from turtle import *
 import random
@@ -30,19 +30,19 @@ class Block(Turtle):
         self.fillcolor("black")
 
     def __repr__(self):
-        return "Block size: {0}".format(self.size)
+        return "方块尺寸: {0}".format(self.size)
 
 
 class Shelf(list):
 
     def __init__(self, y):
-        "create a shelf. y is y-position of first block"
+        "创建架子，y 是第一个方块的 y 轴位置"
         self.y = y
         self.x = -150
 
     def push(self, d):
         width, _, _ = d.shapesize()
-        # align blocks by the bottom edge
+        # 用底边对齐方块
         y_offset = width / 2 * 20
         d.sety(self.y + y_offset)
         d.setx(self.x + 34 * len(self))
@@ -70,7 +70,7 @@ class Shelf(list):
         list.insert(self, key, b)
         b.setx(self.x + 34 * key)
         width, _, _ = b.shapesize()
-        # align blocks by the bottom edge
+        # 用底边对齐方块
         y_offset = width / 2 * 20
         b.sety(self.y + y_offset)
         b.unglow()
@@ -98,11 +98,11 @@ def partition(shelf, left, right, pivot_index):
     pivot = shelf[pivot_index]
     shelf.insert(right, shelf.pop(pivot_index))
     store_index = left
-    for i in range(left, right): # range is non-inclusive of ending value
+    for i in range(left, right): # range 不包含结束值 right
         if shelf[i].size < pivot.size:
             shelf.insert(store_index, shelf.pop(i))
             store_index = store_index + 1
-    shelf.insert(store_index, shelf.pop(right)) # move pivot to correct position
+    shelf.insert(store_index, shelf.pop(right)) # 把 pivot 移到正确位置
     return store_index
 
 def qsort(shelf, left, right):
@@ -128,12 +128,12 @@ def randomize():
 def show_text(text, line=0):
     line = 20 * line
     goto(0,-250 - line)
-    write(text, align="center", font=("Courier", 16, "bold"))
+    write(text, align="center", font=("Microsoft YaHei", 16, "bold"))
 
 def start_ssort():
     disable_keys()
     clear()
-    show_text("Selection Sort")
+    show_text("选择排序")
     ssort(s)
     clear()
     show_text(instructions1)
@@ -143,7 +143,7 @@ def start_ssort():
 def start_isort():
     disable_keys()
     clear()
-    show_text("Insertion Sort")
+    show_text("插入排序")
     isort(s)
     clear()
     show_text(instructions1)
@@ -153,7 +153,7 @@ def start_isort():
 def start_qsort():
     disable_keys()
     clear()
-    show_text("Quicksort")
+    show_text("快速排序")
     qsort(s, 0, len(s) - 1)
     clear()
     show_text(instructions1)
@@ -190,8 +190,8 @@ def main():
     listen()
     return "EVENTLOOP"
 
-instructions1 = "press i for insertion sort, s for selection sort, q for quicksort"
-instructions2 = "spacebar to quit, r to randomize"
+instructions1 = "按 i 插入排序，按 s 选择排序，按 q 快速排序"
+instructions2 = "按空格退出，按 r 随机打乱"
 
 if __name__=="__main__":
     msg = main()
