@@ -1,26 +1,22 @@
-"""turtledemo/tree.py
+"""turtledemo/树.py
 
-Displays a 'breadth-first-tree' - in contrast
-to the classical Logo tree drawing programs,
-which use a depth-first-algorithm.
+显示一个 "广度优先树" - 与经典的用
+Logo 语言编写的深度优先算法绘制的树相对。
 
-Uses:
-(1) a tree-generator, where the drawing is
-quasi the side-effect, whereas the generator
-always yields None.
-(2) Turtle-cloning: At each branching point
-the current pen is cloned. So in the end
-there are 1024 turtles.
+使用了:
+(1) 一个树生成器，绘图是它的副作用，
+生成器自身总是产生 None。
+(2) 海龟克隆：在每个分叉点，当前画笔会被克隆。
+所以最后会有 1024 个海龟。
 """
 from turtle import Turtle, mainloop
 from time import perf_counter as clock
 
 def tree(plist, l, a, f):
-    """ plist is list of pens
-    l is length of branch
-    a is half of the angle between 2 branches
-    f is factor by which branch is shortened
-    from level to level."""
+    """ plist 是画笔列表
+    l 是树枝长度
+    a 是两个分支间夹角的一半
+    f 是每个级别之间树枝缩短的倍率。"""
     if l > 3:
         lst = []
         for p in plist:
@@ -51,7 +47,7 @@ def main():
     a=clock()
     maketree()
     b=clock()
-    return "done: %.2f sec." % (b-a)
+    return "完成: %.2f 秒。" % (b-a)
 
 if __name__ == "__main__":
     msg = main()
