@@ -2,88 +2,72 @@
 
 """
   ----------------------------------------------
-      turtleDemo - Help
+      海龟画图演示 - 帮助
   ----------------------------------------------
 
-  This document has two sections:
+  该文档有两部分:
 
-  (1) How to use the demo viewer
-  (2) How to add your own demos to the demo repository
+  (1) 如何使用演示器
+  (2) 如何添加自己的演示
 
 
-  (1) How to use the demo viewer.
+  (1) 如何使用演示器.
 
-  Select a demoscript from the example menu.
-  The (syntax colored) source code appears in the left
-  source code window. IT CANNOT BE EDITED, but ONLY VIEWED!
+  从演示菜单中选择一个演示脚本。
+  彩色的源代码将在左侧的代码窗口中显示。
+  代码不能编辑，只能查看！
 
-  The demo viewer windows can be resized. The divider between text
-  and canvas can be moved by grabbing it with the mouse. The text font
-  size can be changed from the menu and with Control/Command '-'/'+'.
-  It can also be changed on most systems with Control-mousewheel
-  when the mouse is over the text.
+  演示器窗口可以改变大小，代码和画图区中间的分割线也可以用鼠标拖动。
+  文本字号可以在菜单栏中调整，也可用快捷键 Ctrl/Command+加号/减号。
+  在大多数系统上，也可以把光标放在文本上，然后按 Ctrl+鼠标滚轮调整字号。
 
-  Press START button to start the demo.
-  Stop execution by pressing the STOP button.
-  Clear screen by pressing the CLEAR button.
-  Restart by pressing the START button again.
+  点击开始按钮启动演示。
+  点击停止按钮结束演示。
+  点击清空按钮清空画图区。
+  再次点击开始按钮可重新运行。
 
-  SPECIAL demos, such as clock.py are those which run EVENTDRIVEN.
+  有几个特殊的演示，比如 时钟.py，是事件驱动的。
 
-      Press START button to start the demo.
+      点击开始按钮启动演示。
 
-      - Until the EVENTLOOP is entered everything works
-      as in an ordinary demo script.
+      - 进入事件循环前，一切都与正常演示无异。
 
-      - When the EVENTLOOP is entered, you control the
-      application by using the mouse and/or keys (or it's
-      controlled by some timer events)
-      To stop it you can and must press the STOP button.
+      - 进入事件循环后，您需要用鼠标键盘（或者演示里的自动计时器）来控制它。
+      要结束演示，必须点击停止按钮。
 
-      While the EVENTLOOP is running, the examples menu is disabled.
+      在事件循环运行过程中，演示菜单被禁用。
 
-      - Only after having pressed the STOP button, you may
-      restart it or choose another example script.
+      - 必须在结束演示后，才可以重新启动它，或者选择另外的演示。
 
    * * * * * * * *
-   In some rare situations there may occur interferences/conflicts
-   between events concerning the demo script and those concerning the
-   demo-viewer. (They run in the same process.) Strange behaviour may be
-   the consequence and in the worst case you must close and restart the
-   viewer.
+   在极少数情况下，演示脚本和演示器的事件可能产生冲突（它们运行在同一个进程中），
+   可能导致一些奇怪的事情发生。在最坏的情况下，您需要关闭并重新打开演示器。
    * * * * * * * *
 
 
-   (2) How to add your own demos to the demo repository
+   (2) 如何添加自己的演示
 
-   - Place the file in the same directory as turtledemo/__main__.py
-     IMPORTANT! When imported, the demo should not modify the system
-     by calling functions in other modules, such as sys, tkinter, or
-     turtle. Global variables should be initialized in main().
+   - 将演示脚本文件放在与 turtledemo/__main__.py 相同目录中。
+     注意！当演示脚本被导入时，它不可以调用其他模块的函数
+     （比如 sys、tkinter、turtle 等）来修改系统。全局变量应在 main() 中初始化。
 
-   - The code must contain a main() function which will
-     be executed by the viewer (see provided example scripts).
-     It may return a string which will be displayed in the Label below
-     the source code window (when execution has finished.)
+   - 代码需要有一个 main() 函数，演示器将会执行这个函数（参考示例脚本）。
+     它可以返回一个字符串，这个字符串会在演示结束后显示在代码窗口下方的标签里。
 
-   - In order to run mydemo.py by itself, such as during development,
-     add the following at the end of the file:
+   - 为了在开发时可以单独运行演示脚本（比如 mydemo.py），可以在脚本的末尾加上这些代码:
 
     if __name__ == '__main__':
         main()
-        mainloop()  # keep window open
+        mainloop()  # 保持窗口开启
 
-    python -m turtledemo.mydemo  # will then run it
+    python -m turtledemo.mydemo  # 执行这行命令来运行演示
 
-   - If the demo is EVENT DRIVEN, main must return the string
-     "EVENTLOOP". This informs the demo viewer that the script is
-     still running and must be stopped by the user!
+   - 如果演示是事件驱动的，main 函数必须返回字符串 "EVENTLOOP"，
+     来告诉演示器我们的脚本仍在运行，需要让用户来停止！
 
-     If an "EVENTLOOP" demo runs by itself, as with clock, which uses
-     ontimer, or minimal_hanoi, which loops by recursion, then the
-     code should catch the turtle.Terminator exception that will be
-     raised when the user presses the STOP button.  (Paint is not such
-     a demo; it only acts in response to mouse clicks and movements.)
+     如果一个事件驱动的演示需要自动运行，比如使用 ontimer 定时器的时钟，
+     以及使用递归循环的最小汉诺塔，代码应捕获用户按下停止按钮时引发的
+     turtle.Terminator 异常。（画图不是事件驱动的，它只是相应鼠标点击和移动）
 """
 import sys
 import os
@@ -107,9 +91,9 @@ RUNNING = 3
 DONE = 4
 EVENTDRIVEN = 5
 
-menufont = ("Arial", 12, NORMAL)
-btnfont = ("Arial", 12, 'bold')
-txtfont = ['Lucida Console', 10, 'normal']
+menufont = ("Microsoft YaHei", 12, NORMAL)
+btnfont = ("Microsoft YaHei", 12, 'bold')
+txtfont = ['Microsoft YaHei', 10, 'normal']
 
 MINIMUM_FONT_SIZE = 6
 MAXIMUM_FONT_SIZE = 100
@@ -120,9 +104,9 @@ def getExampleEntries():
             entry.endswith(".py") and entry[0] != '_']
 
 help_entries = (  # (help_label,  help_doc)
-    ('Turtledemo help', __doc__),
-    ('About turtledemo', about_turtledemo),
-    ('About turtle module', turtle.__doc__),
+    ('演示帮助', __doc__),
+    ('关于演示器', about_turtledemo),
+    ('关于海龟画图', turtle.__doc__),
     )
 
 
@@ -130,7 +114,7 @@ class DemoWindow(object):
 
     def __init__(self, filename=None):
         self.root = root = turtle._root = Tk()
-        root.title('Python turtle-graphics examples')
+        root.title('Python 海龟画图演示')
         root.wm_protocol("WM_DELETE_WINDOW", self._destroy)
 
         if darwin:
@@ -156,11 +140,11 @@ class DemoWindow(object):
 
         self.mBar = Menu(root, relief=RAISED, borderwidth=2)
         self.mBar.add_cascade(menu=self.makeLoadDemoMenu(self.mBar),
-                              label='Examples', underline=0)
+                              label='演示', underline=0)
         self.mBar.add_cascade(menu=self.makeFontMenu(self.mBar),
-                              label='Fontsize', underline=0)
+                              label='字号', underline=0)
         self.mBar.add_cascade(menu=self.makeHelpMenu(self.mBar),
-                              label='Help', underline=0)
+                              label='帮助', underline=0)
         root['menu'] = self.mBar
 
         pane = PanedWindow(root, orient=HORIZONTAL, sashwidth=5,
@@ -170,23 +154,23 @@ class DemoWindow(object):
         pane.grid(row=0, columnspan=4, sticky='news')
 
         self.output_lbl = Label(root, height= 1, text=" --- ", bg="#ddf",
-                                font=("Arial", 16, 'normal'), borderwidth=2,
+                                font=("Microsoft YaHei", 16, 'normal'), borderwidth=2,
                                 relief=RIDGE)
         if darwin:  # Leave Mac button colors alone - #44254.
-            self.start_btn = Button(root, text=" START ", font=btnfont,
+            self.start_btn = Button(root, text=" 开始 ", font=btnfont,
                                     fg='#00cc22', command=self.startDemo)
-            self.stop_btn = Button(root, text=" STOP ", font=btnfont,
+            self.stop_btn = Button(root, text=" 停止 ", font=btnfont,
                                    fg='#00cc22', command=self.stopIt)
-            self.clear_btn = Button(root, text=" CLEAR ", font=btnfont,
+            self.clear_btn = Button(root, text=" 清空 ", font=btnfont,
                                     fg='#00cc22', command = self.clearCanvas)
         else:
-            self.start_btn = Button(root, text=" START ", font=btnfont,
+            self.start_btn = Button(root, text=" 开始 ", font=btnfont,
                                     fg="white", disabledforeground = "#fed",
                                     command=self.startDemo)
-            self.stop_btn = Button(root, text=" STOP ", font=btnfont,
+            self.stop_btn = Button(root, text=" 停止 ", font=btnfont,
                                    fg="white", disabledforeground = "#fed",
                                    command=self.stopIt)
-            self.clear_btn = Button(root, text=" CLEAR ", font=btnfont,
+            self.clear_btn = Button(root, text=" 清空 ", font=btnfont,
                                     fg="white", disabledforeground="#fed",
                                     command = self.clearCanvas)
         self.output_lbl.grid(row=1, column=0, sticky='news', padx=(0,5))
@@ -200,7 +184,7 @@ class DemoWindow(object):
         if filename:
             self.loadfile(filename)
         self.configGUI(DISABLED, DISABLED, DISABLED,
-                       "Choose example from menu", "black")
+                       "从菜单栏选择一个演示吧", "black")
         self.state = STARTUP
 
 
@@ -261,7 +245,7 @@ class DemoWindow(object):
     def set_txtsize(self, size):
         txtfont[1] = size
         self.text['font'] = tuple(txtfont)
-        self.output_lbl['text'] = 'Font size %d' % size
+        self.output_lbl['text'] = '字号 %d' % size
 
     def decrease_size(self, dummy=None):
         self.set_txtsize(max(txtfont[1] - 1, MINIMUM_FONT_SIZE))
@@ -305,9 +289,9 @@ class DemoWindow(object):
 
     def makeFontMenu(self, master):
         menu = Menu(master)
-        menu.add_command(label="Decrease (C-'-')", command=self.decrease_size,
+        menu.add_command(label="减小 (Ctrl+减号)", command=self.decrease_size,
                          font=menufont)
-        menu.add_command(label="Increase (C-'+')", command=self.increase_size,
+        menu.add_command(label="增大 (Ctrl+加号)", command=self.increase_size,
                          font=menufont)
         menu.add_separator()
 
@@ -338,13 +322,13 @@ class DemoWindow(object):
         modname = 'turtledemo.' + filename
         __import__(modname)
         self.module = sys.modules[modname]
-        with open(self.module.__file__, 'r') as f:
+        with open(self.module.__file__, 'r', encoding='utf-8') as f:
             chars = f.read()
         self.text.delete("1.0", "end")
         self.text.insert("1.0", chars)
-        self.root.title(filename + " - a Python turtle graphics example")
+        self.root.title(filename + " - 海龟画图演示")
         self.configGUI(NORMAL, DISABLED, DISABLED,
-                       "Press start button", "red")
+                       "点击开始按钮", "red")
         self.state = READY
 
     def startDemo(self):
@@ -352,7 +336,7 @@ class DemoWindow(object):
         self.dirty = True
         turtle.TurtleScreen._RUNNING = True
         self.configGUI(DISABLED, NORMAL, DISABLED,
-                       "demo running...", "black")
+                       "演示正在运行中...", "black")
         self.screen.clear()
         self.screen.mode("standard")
         self.state = RUNNING
@@ -367,14 +351,14 @@ class DemoWindow(object):
             if self.root is None:
                 return
             self.state = DONE
-            result = "stopped!"
+            result = "已停止!"
         if self.state == DONE:
             self.configGUI(NORMAL, DISABLED, NORMAL,
                            result)
         elif self.state == EVENTDRIVEN:
             self.exitflag = True
             self.configGUI(DISABLED, NORMAL, DISABLED,
-                           "use mouse/keys or STOP", "red")
+                           "请使用鼠标与键盘，点击停止按钮结束", "red")
 
     def clearCanvas(self):
         self.refreshCanvas()
@@ -387,7 +371,7 @@ class DemoWindow(object):
             self.clearCanvas()
             self.exitflag = False
             self.configGUI(NORMAL, DISABLED, DISABLED,
-                           "STOPPED!", "red")
+                           "已停止!", "red")
         turtle.TurtleScreen._RUNNING = False
 
     def _destroy(self):
