@@ -1,29 +1,24 @@
-"""turtledemo/bytedesign.py
+"""turtledemo/字节设计.py
 
-An example adapted from the example-suite
-of PythonCard's turtle graphics.
+改编自 PythonCard 项目的海龟画图演示套装。
 
-It's based on an article in BYTE magazine
-Problem Solving with Logo: Using Turtle
-Graphics to Redraw a Design
-November 1982, p. 118 - 134
+基于《BYTE》（字节）杂志的文章
+《Logo 语言解决问题：利用海龟画图设计图案》
+1982年11月，第118-134页
 
 -------------------------------------------
 
-Due to the statement
+由于第149行的代码
 
 t.delay(0)
 
-in line 152, which sets the animation delay
-to 0, this animation runs in "line per line"
-mode as fast as possible.
+将动画延迟设为0，此动画会一行行地高速运行。
 """
 
 from turtle import Turtle, mainloop
 from time import perf_counter as clock
 
-# wrapper for any additional drawing routines
-# that need to know about each other
+# 为任何需要相互了解的附加绘图例程提供封装
 class Designer(Turtle):
 
     def design(self, homePos, scale):
@@ -150,7 +145,7 @@ def main():
     at = clock()
     t.design(t.position(), 2)
     et = clock()
-    return "runtime: %.2f sec." % (et-at)
+    return "运行时间: %.2f 秒。" % (et-at)
 
 if __name__ == '__main__':
     msg = main()
