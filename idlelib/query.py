@@ -86,7 +86,7 @@ class Query(Toplevel):
             self.entry.focus_set()
             self.wait_window()
 
-    def create_widgets(self, ok_text='OK'):  # Do not replace.
+    def create_widgets(self, ok_text='确定'):  # Do not replace.
         """Create entry (rows, extras, buttons.
 
         Entry stuff on rows 0-2, spanning cols 0-2.
@@ -117,7 +117,7 @@ class Query(Toplevel):
         self.button_ok = Button(
                 frame, text=ok_text, default='active', command=self.ok)
         self.button_cancel = Button(
-                frame, text='Cancel', command=self.cancel)
+                frame, text='取消', command=self.cancel)
 
         self.button_ok.grid(column=1, row=99, padx=5)
         self.button_cancel.grid(column=2, row=99, padx=5)
@@ -126,13 +126,13 @@ class Query(Toplevel):
 
     def showerror(self, message, widget=None):
         #self.bell(displayof=self)
-        (widget or self.entry_error)['text'] = 'ERROR: ' + message
+        (widget or self.entry_error)['text'] = '错误: ' + message
 
     def entry_ok(self):  # Example: usually replace.
         "Return non-blank entry or None."
         entry = self.entry.get().strip()
         if not entry:
-            self.showerror('blank line.')
+            self.showerror('输入为空。')
             return None
         return entry
 
@@ -173,13 +173,13 @@ class SectionName(Query):
         "Return sensible ConfigParser section name or None."
         name = self.entry.get().strip()
         if not name:
-            self.showerror('no name specified.')
+            self.showerror('未指定名称。')
             return None
         elif len(name)>30:
-            self.showerror('name is longer than 30 characters.')
+            self.showerror('名称需小于 30 字符。')
             return None
         elif name in self.used_names:
-            self.showerror('name is already in use.')
+            self.showerror('名称已被占用。')
             return None
         return name
 
@@ -197,7 +197,7 @@ class ModuleName(Query):
         "Return entered module name as file path or None."
         name = self.entry.get().strip()
         if not name:
-            self.showerror('no name specified.')
+            self.showerror('未指定名称。')
             return None
         # XXX Ought to insert current file's directory in front of path.
         try:
@@ -206,22 +206,22 @@ class ModuleName(Query):
             self.showerror(str(msg))
             return None
         if spec is None:
-            self.showerror("module not found.")
+            self.showerror("找不到该模块。")
             return None
         if not isinstance(spec.loader, importlib.abc.SourceLoader):
-            self.showerror("not a source-based module.")
+            self.showerror("该模块没有 Python 源代码。")
             return None
         try:
             file_path = spec.loader.get_filename(name)
         except AttributeError:
-            self.showerror("loader does not support get_filename.")
+            self.showerror("加载器不支持 get_filename 方法。")
             return None
         except ImportError:
             # Some special modules require this (e.g. os.path)
             try:
                 file_path = spec.loader.get_filename()
             except TypeError:
-                self.showerror("loader failed to get filename.")
+                self.showerror("加载器无法获取文件名。")
                 return None
         return file_path
 
@@ -234,10 +234,10 @@ class Goto(Query):
         try:
             lineno = int(self.entry.get())
         except ValueError:
-            self.showerror('not a base 10 integer.')
+            self.showerror('请输入正整数，这不是数字。')
             return None
         if lineno <= 0:
-            self.showerror('not a positive integer.')
+            self.showerror('请输入正整数，不可以是负数。')
             return None
         return lineno
 
@@ -254,7 +254,7 @@ class HelpSource(Query):
         name. The user can browse for the file.
         """
         self.filepath = filepath
-        message = 'Name for item on Help menu:'
+        message = '帮助菜单项的名称:'
         super().__init__(
                 parent, title, message, text0=menuitem,
                 used_names=used_names, _htest=_htest, _utest=_utest)
@@ -263,10 +263,10 @@ class HelpSource(Query):
         "Add path widjets to rows 10-12."
         frame = self.frame
         pathlabel = Label(frame, anchor='w', justify='left',
-                          text='Help File Path: Enter URL or browse for file')
+                          text='帮助文件路径: 请输入地址或选择文件')
         self.pathvar = StringVar(self, self.filepath)
         self.path = Entry(frame, textvariable=self.pathvar, width=40)
-        browse = Button(frame, text='Browse', width=8,
+        browse = Button(frame, text='选择', width=8,
                         command=self.browse_file)
         self.path_error = Label(frame, text=' ', foreground='red',
                                 font=self.error_font)
@@ -288,18 +288,18 @@ class HelpSource(Query):
 
     def browse_file(self):
         filetypes = [
-            ("HTML Files", "*.htm *.html", "TEXT"),
-            ("PDF Files", "*.pdf", "TEXT"),
-            ("Windows Help Files", "*.chm"),
-            ("Text Files", "*.txt", "TEXT"),
-            ("All Files", "*")]
+            ("HTML 文件", "*.htm *.html", "TEXT"),
+            ("PDF 文件", "*.pdf", "TEXT"),
+            ("Windows 帮助文件", "*.chm"),
+            ("文本文件", "*.txt", "TEXT"),
+            ("所有文件", "*")]
         path = self.pathvar.get()
         if path:
             dir, base = os.path.split(path)
         else:
             base = None
             if platform[:3] == 'win':
-                dir = os.path.join(os.path.dirname(executable), 'Doc')
+                dir = os.path.join(os.path.dirname(executable), '文档')
                 if not os.path.isdir(dir):
                     dir = os.getcwd()
             else:
@@ -314,13 +314,13 @@ class HelpSource(Query):
         "Simple validity check for menu file path"
         path = self.path.get().strip()
         if not path: #no path specified
-            self.showerror('no help file path specified.', self.path_error)
+            self.showerror('未指定帮助文件路径。', self.path_error)
             return None
         elif not path.startswith(('www.', 'http')):
             if path[:5] == 'file:':
                 path = path[5:]
             if not os.path.exists(path):
-                self.showerror('help file path does not exist.',
+                self.showerror('帮助文件不存在。',
                                self.path_error)
                 return None
             if platform == 'darwin':  # for Mac Safari
@@ -349,7 +349,7 @@ class CustomRun(Query):
         The list is assigned to the default Entry StringVar.
         The strings are displayed joined by ' ' for display.
         """
-        message = 'Command Line Arguments for sys.argv:'
+        message = '传入 sys.argv 的命令行参数:'
         super().__init__(
                 parent, title, message, text0=cli_args,
                 _htest=_htest, _utest=_utest)
@@ -359,7 +359,7 @@ class CustomRun(Query):
         frame = self.frame
         self.restartvar = BooleanVar(self, value=True)
         restart = Checkbutton(frame, variable=self.restartvar, onvalue=True,
-                              offvalue=False, text='Restart shell')
+                              offvalue=False, text='重启命令行')
         self.args_error = Label(frame, text=' ', foreground='red',
                                 font=self.error_font)
 
