@@ -1,25 +1,19 @@
-"""      turtle-example-suite:
+"""     海龟画图演示套装:
 
-         tdemo_round_dance.py
+             跳舞.py
 
-(Needs version 1.1 of the turtle module that
-comes with Python 3.1)
+(需要 Python 3.1 的 turtle 1.1 以上)
 
-Dancing turtles have a compound shape
-consisting of a series of triangles of
-decreasing size.
+跳舞的 "海龟" 的形状是一些复合图形，
+由一系列大小递减的三角形组成。
 
-Turtles march along a circle while rotating
-pairwise in opposite direction, with one
-exception. Does that breaking of symmetry
-enhance the attractiveness of the example?
+海龟沿着圆圈行进，同时成对地向相反方向旋转，
+但是有一只不一样。这种不对称会不会更好玩？
 
-Press any key to stop the animation.
+按任意键停止动画。
 
-Technically: demonstrates use of compound
-shapes, transformation of shapes as well as
-cloning turtles. The animation is
-controlled through update().
+技术上：演示了复合形状的使用、形状的变换
+以及海龟克隆。动画通过 update() 函数控制。
 """
 
 from turtle import *
@@ -38,7 +32,7 @@ def main():
     phi = 9.064678
     s = 5
     c = 1
-    # create compound shape
+    # 创建复合形状
     sh = Shape("compound")
     for i in range(10):
         shapesize(s)
@@ -48,7 +42,7 @@ def main():
         tilt(-phi)
         sh.addcomponent(p, (c, 0.25, 1-c), "black")
     register_shape("multitri", sh)
-    # create dancers
+    # 创建跳舞海龟
     shapesize(1)
     shape("multitri")
     pu()
@@ -62,7 +56,7 @@ def main():
         if i % 12 == 0:
             dancers.append(clone())
     home()
-    # dance
+    # 跳舞
     running = True
     onkeypress(stop)
     listen()
@@ -79,7 +73,7 @@ def main():
             shapesize(cs)
             cs *= 1.005
         update()
-    return "DONE!"
+    return "完成!"
 
 if __name__=='__main__':
     print(main())
