@@ -1,11 +1,11 @@
-"""turtledemo/forest.py
+"""turtledemo/森林.py
 
-Displays a 'forest' of 3 breadth-first trees,
-similar to the one in tree.py.
-For further details, see tree.py.
+显示一个三颗广度优先树组成的 "森林"，
+类似于 树.py 中的树。
+关于进一步的解释，请参考 树.py。
 
-This example is a breadth-first rewrite of
-a Logo program by Erich Neuwirth.
+该演示是对 Erich Neuwirth 编写的一个类似的
+Logo 编程语言程序的 "广度优先" 改编。
 """
 from turtle import Turtle, colormode, tracer, mainloop
 from random import randrange
@@ -25,8 +25,7 @@ def randomfd( t, distance, parts, angledist ):
         t.forward( (1.0 * distance)/parts )
 
 def tree(tlist, size, level, widthfactor, branchlists, angledist=10, sizedist=5):
-    # benutzt Liste von turtles und Liste von Zweiglisten,
-    # fuer jede turtle eine!
+    # 使用 turtles 和 branchlists 列表，每个 turtle 对应一个 branchlist！
     if level > 0:
         lst = []
         brs = []
@@ -76,7 +75,7 @@ def doit3(level, pen):
     t = tree( [pen], 100, level, 0.1, [[ (45,0.7), (0,0.72), (-45,0.65) ]] )
     return t
 
-# Hier 3 Baumgeneratoren:
+# 这儿有三个树生成器:
 def main():
     p = Turtle()
     p.ht()
@@ -97,7 +96,7 @@ def main():
 
     tracer(1,10)
     b = clock()
-    return "runtime: %.2f sec." % (b-a)
+    return "运行时间: %.2f 秒。" % (b-a)
 
 if __name__ == '__main__':
     main()
