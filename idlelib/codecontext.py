@@ -133,7 +133,7 @@ class CodeContext:
             self.cell00 = Frame(self.editwin.text_frame,
                                         bg=line_number_colors['background'])
             self.cell00.grid(row=0, column=0, sticky=NSEW)
-            menu_status = 'Hide'
+            menu_status = '隐藏'
         else:
             self.context.destroy()
             self.context = None
@@ -141,9 +141,9 @@ class CodeContext:
             self.cell00 = None
             self.text.after_cancel(self.t1)
             self._reset()
-            menu_status = 'Show'
-        self.editwin.update_menu_label(menu='options', index='*ode*ontext',
-                                       label=f'{menu_status} Code Context')
+            menu_status = '显示'
+        self.editwin.update_menu_label(menu='options', index='*代码上文*',
+                                       label=f'{menu_status}代码上文(C)')
         return "break"
 
     def get_context(self, new_topvisible, stopline=1, stopindent=0):

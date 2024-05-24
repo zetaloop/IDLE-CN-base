@@ -93,7 +93,7 @@ class ViewFrame(Frame):
         text.focus_set()
 
         self.button_ok = button_ok = Button(
-                self, text='Close', command=self.ok, takefocus=False)
+                self, text='关闭', command=self.ok, takefocus=False)
         self.textframe.pack(side='top', expand=True, fill='both')
         button_ok.pack(side='bottom')
 
@@ -129,7 +129,7 @@ class ViewWindow(Toplevel):
         self.title(title)
         self.viewframe = ViewFrame(self, contents, wrap=wrap)
         self.protocol("WM_DELETE_WINDOW", self.ok)
-        self.button_ok = button_ok = Button(self, text='Close',
+        self.button_ok = button_ok = Button(self, text='关闭',
                                             command=self.ok, takefocus=False)
         self.viewframe.pack(side='top', expand=True, fill='both')
 
@@ -172,11 +172,11 @@ def view_file(parent, title, filename, encoding, modal=True, wrap='word',
         with open(filename, 'r', encoding=encoding) as file:
             contents = file.read()
     except OSError:
-        showerror(title='File Load Error',
-                  message=f'Unable to load file {filename!r} .',
+        showerror(title='文件加载错误',
+                  message=f'无法加载文件 {filename!r} .',
                   parent=parent)
     except UnicodeDecodeError as err:
-        showerror(title='Unicode Decode Error',
+        showerror(title='Unicode 解码错误',
                   message=str(err),
                   parent=parent)
     else:
