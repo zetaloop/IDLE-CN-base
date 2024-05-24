@@ -74,7 +74,10 @@ class IdleConfParser(ConfigParser):
     def Load(self):
         "Load the configuration file from disk."
         if self.file:
-            self.read(self.file)
+            try:
+                self.read(self.file, encoding="utf-8")  # IDLE-CN: utf-8 for all
+            except UnicodeDecodeError:
+                self.read(self.file)
 
 class IdleUserConfParser(IdleConfParser):
     """
@@ -133,10 +136,10 @@ class IdleUserConfParser(IdleConfParser):
         if fname and fname[0] != '#':
             if not self.IsEmpty():
                 try:
-                    cfgFile = open(fname, 'w')
+                    cfgFile = open(fname, 'w', encoding='utf-8')
                 except OSError:
                     os.unlink(fname)
-                    cfgFile = open(fname, 'w')
+                    cfgFile = open(fname, 'w', encoding='utf-8')
                 with cfgFile:
                     self.write(cfgFile)
             elif os.path.exists(self.file):
@@ -185,8 +188,8 @@ class IdleConf:
         if userDir != '~': # expanduser() found user home dir
             if not os.path.exists(userDir):
                 if not idlelib.testing:
-                    warn = ('\n Warning: os.path.expanduser("~") points to\n ' +
-                            userDir + ',\n but the path does not exist.')
+                    warn = ('\n 警告: os.path.expanduser("~") 指向\n ' +
+                            userDir + '，\n 但是此路径不存在。')
                     try:
                         print(warn, file=sys.stderr)
                     except OSError:
@@ -201,8 +204,8 @@ class IdleConf:
                 os.mkdir(userDir)
             except OSError:
                 if not idlelib.testing:
-                    warn = ('\n Warning: unable to create user config directory\n' +
-                            userDir + '\n Check path and permissions.\n Exiting!\n')
+                    warn = ('\n 警告: 无法创建用户配置文件目录\n' +
+                            userDir + '\n 请检查路径和权限。\n 正在退出软件!\n')
                     try:
                         print(warn, file=sys.stderr)
                     except OSError:
@@ -229,10 +232,10 @@ class IdleConf:
                 return self.userCfg[configType].Get(section, option,
                                                     type=type, raw=raw)
         except ValueError:
-            warning = ('\n Warning: config.py - IdleConf.GetOption -\n'
-                       ' invalid %r value for configuration option %r\n'
-                       ' from section %r: %r' %
-                       (type, option, section,
+            warning = ('\n 警告: config.py - IdleConf.GetOption -\n'
+                       ' 选段 %r 中，选项 %r 的值 %r 无效\n'
+                       ' 信息: %r' %
+                       (section, option, type,
                        self.userCfg[configType].Get(section, option, raw=raw)))
             _warn(warning, configType, section, option)
         try:
@@ -243,11 +246,10 @@ class IdleConf:
             pass
         #returning default, print warning
         if warn_on_default:
-            warning = ('\n Warning: config.py - IdleConf.GetOption -\n'
-                       ' problem retrieving configuration option %r\n'
-                       ' from section %r.\n'
-                       ' returning default value: %r' %
-                       (option, section, default))
+            warning = ('\n 警告: config.py - IdleConf.GetOption -\n'
+                       ' 从选段 %r 中获取选项 %r 失败。\n'
+                       ' 返回默认值: %r' %
+                       (section, option, default))
             _warn(warning, configType, section, option)
         return default
 
@@ -262,13 +264,13 @@ class IdleConf:
         configType must be in self.config_types.
         """
         if not (configType in self.config_types):
-            raise InvalidConfigType('Invalid configType specified')
+            raise InvalidConfigType('指定了无效的 configType')
         if configSet == 'user':
             cfgParser = self.userCfg[configType]
         elif configSet == 'default':
             cfgParser=self.defaultCfg[configType]
         else:
-            raise InvalidConfigSet('Invalid configSet specified')
+            raise InvalidConfigSet('指定了无效的 configSet')
         return cfgParser.sections()
 
     def GetHighlight(self, theme, element):
@@ -299,7 +301,7 @@ class IdleConf:
         elif type == 'default':
             cfgParser = self.defaultCfg['highlight']
         else:
-            raise InvalidTheme('Invalid theme type specified')
+            raise InvalidTheme('指定了无效的主题类型')
         # Provide foreground and background colors for each theme
         # element (other than cursor) even though some values are not
         # yet used by idle, to allow for their use in the future.
@@ -344,11 +346,10 @@ class IdleConf:
                     # Skip warning for new elements.
                     element.startswith(('context-', 'linenumber-'))):
                 # Print warning that will return a default color
-                warning = ('\n Warning: config.IdleConf.GetThemeDict'
-                           ' -\n problem retrieving theme element %r'
-                           '\n from theme %r.\n'
-                           ' returning default color: %r' %
-                           (element, themeName, theme[element]))
+                warning = ('\n 警告: config.IdleConf.GetThemeDict'
+                           ' -\n 从主题 %r 中获取元素 %r 失败。\n'
+                           ' 返回默认颜色: %r' %
+                           (themeName, element, theme[element]))
                 _warn(warning, 'highlight', themeName, element)
             theme[element] = cfgParser.Get(
                     themeName, element, default=theme[element])
@@ -398,16 +399,16 @@ class IdleConf:
             source = self.defaultCfg if default else self.userCfg
             if source[cfgname].has_section(name):
                 return name
-        return "IDLE Classic" if section == 'Theme' else self.default_keys()
+        return "IDLE 经典" if section == 'Theme' else self.default_keys()
 
     @staticmethod
     def default_keys():
         if sys.platform[:3] == 'win':
-            return 'IDLE Classic Windows'
+            return 'IDLE 经典 Windows'
         elif sys.platform == 'darwin':
-            return 'IDLE Classic OSX'
+            return 'IDLE 经典 OSX'
         else:
-            return 'IDLE Modern Unix'
+            return 'IDLE 现代 Unix'
 
     def GetExtensions(self, active_only=True,
                       editor_only=False, shell_only=False):
@@ -578,8 +579,8 @@ class IdleConf:
         """
         return ('<<'+virtualEvent+'>>') in self.GetCoreKeys()
 
-# TODO make keyBindins a file or class attribute used for test above
-# and copied in function below.
+    # TODO make keyBindins a file or class attribute used for test above
+    # and copied in function below.
 
     former_extension_events = {  #  Those with user-configurable keys.
         '<<force-open-completions>>', '<<expand-word>>',
@@ -662,8 +663,8 @@ class IdleConf:
             if not (self.userCfg['keys'].has_section(keySetName) or
                     self.defaultCfg['keys'].has_section(keySetName)):
                 warning = (
-                    '\n Warning: config.py - IdleConf.GetCoreKeys -\n'
-                    ' key set %r is not defined, using default bindings.' %
+                    '\n 警告: config.py - IdleConf.GetCoreKeys -\n'
+                    ' 快捷键预设 %r 未定义，使用默认快捷键。' %
                     (keySetName,)
                 )
                 _warn(warning, 'keys', keySetName)
@@ -675,11 +676,10 @@ class IdleConf:
                     # Otherwise return default in keyBindings.
                     elif event not in self.former_extension_events:
                         warning = (
-                            '\n Warning: config.py - IdleConf.GetCoreKeys -\n'
-                            ' problem retrieving key binding for event %r\n'
-                            ' from key set %r.\n'
-                            ' returning default value: %r' %
-                            (event, keySetName, keyBindings[event])
+                            '\n 警告: config.py - IdleConf.GetCoreKeys -\n'
+                            ' 从快捷键预设 %r 中获取 %r 的快捷键失败。\n'
+                            ' 返回默认值: %r' %
+                            (keySetName, event, keyBindings[event])
                         )
                         _warn(warning, 'keys', keySetName, event)
         return keyBindings

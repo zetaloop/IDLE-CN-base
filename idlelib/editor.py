@@ -101,7 +101,7 @@ class EditorWindow:
                     # Safari requires real file:-URLs
                     EditorWindow.help_url = 'file://' + EditorWindow.help_url
             else:
-                EditorWindow.help_url = ("https://docs.python.org/%d.%d/"
+                EditorWindow.help_url = ("https://docs.python.org/zh-cn/%d.%d/"
                                          % sys.version_info[:2])
         self.flist = flist
         root = root or flist.root
@@ -340,7 +340,7 @@ class EditorWindow:
             text.bind("<<toggle-code-context>>",
                       self.code_context.toggle_code_context_event)
         else:
-            self.update_menu_state('options', '*ode*ontext', 'disabled')
+            self.update_menu_state('options', '*代码上文*', 'disabled')
         if self.allow_line_numbers:
             self.line_numbers = self.LineNumbers(self)
             if idleConf.GetOption('main', 'EditorWindow',
@@ -348,7 +348,7 @@ class EditorWindow:
                 self.toggle_line_numbers_event()
             text.bind("<<toggle-line-numbers>>", self.toggle_line_numbers_event)
         else:
-            self.update_menu_state('options', '*ine*umbers', 'disabled')
+            self.update_menu_state('options', '*行号*', 'disabled')
 
     def handle_winconfig(self, event=None):
         self.set_width()
@@ -421,8 +421,8 @@ class EditorWindow:
             # Insert some padding to avoid obscuring some of the statusbar
             # by the resize widget.
             self.status_bar.set_label('_padding1', '    ', side=RIGHT)
-        self.status_bar.set_label('column', 'Col: ?', side=RIGHT)
-        self.status_bar.set_label('line', 'Ln: ?', side=RIGHT)
+        self.status_bar.set_label('column', '列: ?', side=RIGHT)
+        self.status_bar.set_label('line', '行: ?', side=RIGHT)
         self.status_bar.pack(side=BOTTOM, fill=X)
         sep.pack(side=BOTTOM, fill=X)
         self.text.bind("<<set-line-and-column>>", self.set_line_and_column)
@@ -432,17 +432,17 @@ class EditorWindow:
 
     def set_line_and_column(self, event=None):
         line, column = self.text.index(INSERT).split('.')
-        self.status_bar.set_label('column', 'Col: %s' % column)
-        self.status_bar.set_label('line', 'Ln: %s' % line)
+        self.status_bar.set_label('column', '列: %s' % column)
+        self.status_bar.set_label('line', '行: %s' % line)
 
     menu_specs = [
-        ("file", "_File"),
-        ("edit", "_Edit"),
-        ("format", "F_ormat"),
-        ("run", "_Run"),
-        ("options", "_Options"),
-        ("window", "_Window"),
-        ("help", "_Help"),
+        ("file", "文件(_F)"),
+        ("edit", "编辑(_E)"),
+        ("format", "格式(_O)"),
+        ("run", "运行(_R)"),
+        ("options", "设置(_O)"),
+        ("window", "窗口(_W)"),
+        ("help", "帮助(_H)"),
     ]
 
 
@@ -462,7 +462,7 @@ class EditorWindow:
             mbar.add_cascade(label='IDLE', menu=menu)
         self.fill_menus()
         self.recent_files_menu = Menu(self.menubar, tearoff=0)
-        self.menudict['file'].insert_cascade(3, label='Recent Files',
+        self.menudict['file'].insert_cascade(3, label='最近文件',
                                              underline=0,
                                              menu=self.recent_files_menu)
         self.base_helpmenu_length = self.menudict['help'].index(END)
@@ -538,7 +538,7 @@ class EditorWindow:
 
     rmenu_specs = [
         # ("Label", "<<virtual-event>>", "statefuncname"), ...
-        ("Close", "<<close-window>>", None), # Example
+        ("关闭", "<<close-window>>", None), # Example
     ]
 
     def make_rmenu(self):
@@ -581,7 +581,7 @@ class EditorWindow:
     def config_dialog(self, event=None):
         "Handle Options 'Configure IDLE' event."
         # Synchronize with macosx.overrideRootMenu.config_dialog.
-        configdialog.ConfigDialog(self.top,'Settings')
+        configdialog.ConfigDialog(self.top,'设置')
         return "break"
 
     def help_dialog(self, event=None):
@@ -599,7 +599,7 @@ class EditorWindow:
             try:
                 os.startfile(self.help_url)
             except OSError as why:
-                messagebox.showerror(title='Document Start Failure',
+                messagebox.showerror(title='文档启动失败',
                     message=str(why), parent=self.text)
         else:
             webbrowser.open(self.help_url)
@@ -683,9 +683,9 @@ class EditorWindow:
     def goto_line_event(self, event):
         text = self.text
         lineno = query.Goto(
-                text, "Go To Line",
-                "Enter a positive integer\n"
-                "('big' = end of file):"
+                text, "跳转行号",
+                "请输入正整数的行号：\n"
+                "超过文件总行数就会到文件末尾"
                 ).result
         if lineno is not None:
             text.tag_remove("sel", "1.0", "end")
@@ -707,9 +707,9 @@ class EditorWindow:
         except TclError:
             name = ''
         file_path = query.ModuleName(
-                self.text, "Open Module",
-                "Enter the name of a Python module\n"
-                "to search on sys.path and open:",
+                self.text, "打开模块",
+                "输入要打开的 Python 模块名：\n"
+                "将在 sys.path 中寻找它",
                 name).result
         if file_path is not None:
             if self.flist:
@@ -930,7 +930,7 @@ class EditorWindow:
                 try:
                     os.startfile(helpfile)
                 except OSError as why:
-                    messagebox.showerror(title='Document Start Failure',
+                    messagebox.showerror(title='文档启动失败',
                         message=str(why), parent=self.text)
             else:
                 webbrowser.open(helpfile)
@@ -966,10 +966,10 @@ class EditorWindow:
             except OSError as err:
                 if not getattr(self.root, "recentfiles_message", False):
                     self.root.recentfiles_message = True
-                    messagebox.showwarning(title='IDLE Warning',
-                        message="Cannot save Recent Files list to disk.\n"
+                    messagebox.showwarning(title='IDLE 警告',
+                        message="无法保存最近文件列表。\n"
                                 f"  {err}\n"
-                                "Select OK to continue.",
+                                "点击确定继续。",
                         parent=self.text)
         # for each edit window instance, construct the recent files menu
         for instance in self.top.instance_dict:
@@ -997,7 +997,7 @@ class EditorWindow:
         elif long:
             title = long
         else:
-            title = "untitled"
+            title = "未命名"
         icon = short or long or title
         if not self.get_saved():
             title = "*%s*" % title
@@ -1016,7 +1016,7 @@ class EditorWindow:
 
     def short_title(self):
         filename = self.io.filename
-        return os.path.basename(filename) if filename else "untitled"
+        return os.path.basename(filename) if filename else "未命名"
 
     def long_title(self):
         return self.io.filename or ""
@@ -1110,7 +1110,7 @@ class EditorWindow:
             try:
                 self.load_extension(name)
             except:
-                print("Failed to load extension", repr(name))
+                print("插件加载失败", repr(name))
                 traceback.print_exc()
 
     def get_standard_extension_names(self):
@@ -1128,7 +1128,7 @@ class EditorWindow:
             except (ImportError, TypeError):
                 mod = importlib.import_module(fname)
         except ImportError:
-            print("\nFailed to import extension: ", name)
+            print("\n无法导入插件: ", name)
             raise
         cls = getattr(mod, name)
         keydefs = idleConf.GetExtensionBindings(name)
@@ -1526,12 +1526,12 @@ class EditorWindow:
 
         if self.line_numbers.is_shown:
             self.line_numbers.hide_sidebar()
-            menu_label = "Show"
+            menu_label = "显示"
         else:
             self.line_numbers.show_sidebar()
-            menu_label = "Hide"
-        self.update_menu_label(menu='options', index='*ine*umbers',
-                               label=f'{menu_label} Line Numbers')
+            menu_label = "隐藏"
+        self.update_menu_label(menu='options', index='*行号*',
+                               label=f'{menu_label}行号(L)')
 
 # "line.col" -> line, as an int
 def index2line(index):

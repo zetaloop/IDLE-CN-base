@@ -6,7 +6,7 @@ from idlelib import macosx
 
 class ScrolledList:
 
-    default = "(None)"
+    default = "(无)"
 
     def __init__(self, master, **options):
         # Create top frame, with scrollbar and listbox

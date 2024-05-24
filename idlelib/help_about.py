@@ -45,7 +45,7 @@ class AboutDialog(Toplevel):
         self.create_widgets()
         self.resizable(height=False, width=False)
         self.title(title or
-                   f'About IDLE {version} ({build_bits()} bit)')
+                   f'关于 IDLE {version} ({build_bits()} 位)')
         self.transient(parent)
         self.grab_set()
         self.protocol("WM_DELETE_WINDOW", self.ok)
@@ -65,7 +65,7 @@ class AboutDialog(Toplevel):
         frame_buttons = Frame(self)
         frame_buttons.pack(side=BOTTOM, fill=X)
         frame.pack(side=TOP, expand=True, fill=BOTH)
-        self.button_ok = Button(frame_buttons, text='Close',
+        self.button_ok = Button(frame_buttons, text='关闭',
                                 command=self.ok)
         self.button_ok.pack(padx=5, pady=5)
 
@@ -84,14 +84,14 @@ class AboutDialog(Toplevel):
         logo = Label(frame_background, image=self.icon_image, bg=self.bg)
         logo.grid(row=0, column=0, sticky=W, rowspan=2, padx=10, pady=10)
 
-        byline_text = "Python's Integrated Development\nand Learning Environment" + 5*'\n'
+        byline_text = "Python 内置的开发和学习环境" + 5*'\n'
         byline = Label(frame_background, text=byline_text, justify=LEFT,
                        fg=self.fg, bg=self.bg)
         byline.grid(row=2, column=0, sticky=W, columnspan=3, padx=10, pady=5)
-        email = Label(frame_background, text='email:  idle-dev@python.org',
+        email = Label(frame_background, text='邮箱:  idle-dev@python.org',
                       justify=LEFT, fg=self.fg, bg=self.bg)
         email.grid(row=6, column=0, columnspan=2, sticky=W, padx=10, pady=0)
-        docs = Label(frame_background, text="https://docs.python.org/"
+        docs = Label(frame_background, text="https://docs.python.org/zh-cn/"
                      f"{version[:version.rindex('.')]}/library/idle.html",
                      justify=LEFT, fg=self.fg, bg=self.bg)
         docs.grid(row=7, column=0, columnspan=2, sticky=W, padx=10, pady=0)
@@ -102,23 +102,23 @@ class AboutDialog(Toplevel):
                                          columnspan=3, padx=5, pady=5)
 
         pyver = Label(frame_background,
-                      text='Python version:  ' + version,
+                      text='Python 版本:  ' + version,
                       fg=self.fg, bg=self.bg)
         pyver.grid(row=9, column=0, sticky=W, padx=10, pady=0)
-        tkver = Label(frame_background, text='Tk version:  ' + tk_patchlevel,
+        tkver = Label(frame_background, text='Tk 版本:  ' + tk_patchlevel,
                       fg=self.fg, bg=self.bg)
         tkver.grid(row=9, column=1, sticky=W, padx=2, pady=0)
         py_buttons = Frame(frame_background, bg=self.bg)
         py_buttons.grid(row=10, column=0, columnspan=2, sticky=NSEW)
-        self.py_license = Button(py_buttons, text='License', width=8,
+        self.py_license = Button(py_buttons, text='许可证', width=8,
                                  highlightbackground=self.bg,
                                  command=self.show_py_license)
         self.py_license.pack(side=LEFT, padx=10, pady=10)
-        self.py_copyright = Button(py_buttons, text='Copyright', width=8,
+        self.py_copyright = Button(py_buttons, text='版权', width=8,
                                    highlightbackground=self.bg,
                                    command=self.show_py_copyright)
         self.py_copyright.pack(side=LEFT, padx=10, pady=10)
-        self.py_credits = Button(py_buttons, text='Credits', width=8,
+        self.py_credits = Button(py_buttons, text='贡献', width=8,
                                  highlightbackground=self.bg,
                                  command=self.show_py_credits)
         self.py_credits.pack(side=LEFT, padx=10, pady=10)
@@ -128,20 +128,20 @@ class AboutDialog(Toplevel):
                                          columnspan=3, padx=5, pady=5)
 
         idlever = Label(frame_background,
-                        text='IDLE version:   ' + version,
+                        text='IDLE 版本:   ' + version,
                         fg=self.fg, bg=self.bg)
         idlever.grid(row=12, column=0, sticky=W, padx=10, pady=0)
         idle_buttons = Frame(frame_background, bg=self.bg)
         idle_buttons.grid(row=13, column=0, columnspan=3, sticky=NSEW)
-        self.readme = Button(idle_buttons, text='README', width=8,
+        self.readme = Button(idle_buttons, text='介绍', width=8,
                              highlightbackground=self.bg,
                              command=self.show_readme)
         self.readme.pack(side=LEFT, padx=10, pady=10)
-        self.idle_news = Button(idle_buttons, text='NEWS', width=8,
+        self.idle_news = Button(idle_buttons, text='更新日志', width=8,
                                 highlightbackground=self.bg,
                                 command=self.show_idle_news)
         self.idle_news.pack(side=LEFT, padx=10, pady=10)
-        self.idle_credits = Button(idle_buttons, text='Credits', width=8,
+        self.idle_credits = Button(idle_buttons, text='贡献', width=8,
                                    highlightbackground=self.bg,
                                    command=self.show_idle_credits)
         self.idle_credits.pack(side=LEFT, padx=10, pady=10)
@@ -149,29 +149,29 @@ class AboutDialog(Toplevel):
     # License, copyright, and credits are of type _sitebuiltins._Printer
     def show_py_license(self):
         "Handle License button event."
-        self.display_printer_text('About - License', license)
+        self.display_printer_text('关于 - 许可证', license)
 
     def show_py_copyright(self):
         "Handle Copyright button event."
-        self.display_printer_text('About - Copyright', copyright)
+        self.display_printer_text('关于 - 版权', copyright)
 
     def show_py_credits(self):
         "Handle Python Credits button event."
-        self.display_printer_text('About - Python Credits', credits)
+        self.display_printer_text('关于 - Python 的贡献者', credits)
 
     # Encode CREDITS.txt to utf-8 for proper version of Loewis.
     # Specify others as ascii until need utf-8, so catch errors.
     def show_idle_credits(self):
         "Handle Idle Credits button event."
-        self.display_file_text('About - Credits', 'CREDITS.txt', 'utf-8')
+        self.display_file_text('关于 - 贡献者', 'CREDITS.txt', 'utf-8')
 
     def show_readme(self):
         "Handle Readme button event."
-        self.display_file_text('About - Readme', 'README.txt', 'ascii')
+        self.display_file_text('关于 - 自述文件', 'README.txt', 'ascii')
 
     def show_idle_news(self):
         "Handle News button event."
-        self.display_file_text('About - NEWS', 'NEWS.txt', 'utf-8')
+        self.display_file_text('关于 - 更新日志', 'NEWS.txt', 'utf-8')
 
     def display_printer_text(self, title, printer):
         """Create textview for built-in constants.

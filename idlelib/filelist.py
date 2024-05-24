@@ -21,8 +21,8 @@ class FileList:
         if os.path.isdir(filename):
             # This can happen when bad filename is passed on command line:
             messagebox.showerror(
-                "File Error",
-                "%r is a directory." % (filename,),
+                "文件错误",
+                "%r 是一个文件夹。" % (filename,),
                 master=self.root)
             return None
         key = os.path.normcase(filename)
@@ -60,7 +60,7 @@ class FileList:
         try:
             key = self.inversedict[edit]
         except KeyError:
-            print("Don't know this EditorWindow object.  (close)")
+            print("未知 EditorWindow 对象。(关闭)")
             return
         if key:
             del self.dict[key]
@@ -73,7 +73,7 @@ class FileList:
         try:
             key = self.inversedict[edit]
         except KeyError:
-            print("Don't know this EditorWindow object.  (rename)")
+            print("未知 EditorWindow 对象。(重命名)")
             return
         filename = edit.io.filename
         if not filename:
@@ -89,8 +89,8 @@ class FileList:
             conflict = self.dict[newkey]
             self.inversedict[conflict] = None
             messagebox.showerror(
-                "Name Conflict",
-                "You now have multiple edit windows open for %r" % (filename,),
+                "文件名冲突",
+                "当前有多个正在编辑 %r 文件的编辑器" % (filename,),
                 master=self.root)
         self.dict[newkey] = edit
         self.inversedict[edit] = newkey

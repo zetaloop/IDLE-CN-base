@@ -31,8 +31,8 @@ def replace(text):
 class ReplaceDialog(SearchDialogBase):
     "Dialog for finding and replacing a pattern in text."
 
-    title = "Replace Dialog"
-    icon = "Replace"
+    title = "替换"
+    icon = "替换"
 
     def __init__(self, root, engine):
         """Create search dialog for finding and replacing text.
@@ -76,7 +76,7 @@ class ReplaceDialog(SearchDialogBase):
     def create_entries(self):
         "Create base and additional label and text entry widgets."
         SearchDialogBase.create_entries(self)
-        self.replent = self.make_entry("Replace with:", self.replvar)[0]
+        self.replent = self.make_entry("替换:", self.replvar)[0]
 
     def create_command_buttons(self):
         """Create base and additional command buttons.
@@ -85,10 +85,10 @@ class ReplaceDialog(SearchDialogBase):
         Replace+Find, and Replace All.
         """
         SearchDialogBase.create_command_buttons(self)
-        self.make_button("Find", self.find_it)
-        self.make_button("Replace", self.replace_it)
-        self.make_button("Replace+Find", self.default_command, isdef=True)
-        self.make_button("Replace All", self.replace_all)
+        self.make_button("查找", self.find_it)
+        self.make_button("替换", self.replace_it)
+        self.make_button("查找并替换", self.default_command, isdef=True)
+        self.make_button("全部替换", self.replace_all)
 
     def find_it(self, event=None):
         "Handle the Find button."
@@ -119,7 +119,7 @@ class ReplaceDialog(SearchDialogBase):
             try:
                 new = m.expand(repl)
             except re.error:
-                self.engine.report_error(repl, 'Invalid Replace Expression')
+                self.engine.report_error(repl, '替换表达式无效')
                 new = None
         else:
             new = repl

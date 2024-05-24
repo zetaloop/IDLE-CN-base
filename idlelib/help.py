@@ -227,7 +227,7 @@ class HelpFrame(Frame):
 
     def toc_menu(self, text):
         "Create table of contents as drop-down menu."
-        toc = Menubutton(self, text='TOC')
+        toc = Menubutton(self, text='目录')
         drop = Menu(toc, tearoff=False)
         for lbl, dex in text.parser.toc:
             drop.add_command(label=lbl, command=lambda dex=dex:text.yview(dex))
@@ -276,7 +276,7 @@ def copy_strip():
          open(dst, 'wb') as out:
         for line in inn:
             out.write(line.rstrip() + b'\n')
-    print(f'{src} copied to {dst}')
+    print(f'{src} 已复制到 {dst}')
 
 def show_idlehelp(parent):
     "Create HelpWindow; called from Idle Help event handler."
@@ -284,7 +284,7 @@ def show_idlehelp(parent):
     if not isfile(filename):
         # Try copy_strip, present message.
         return
-    HelpWindow(parent, filename, 'IDLE Help (%s)' % python_version())
+    HelpWindow(parent, filename, 'IDLE 文档 (%s)' % python_version())
 
 if __name__ == '__main__':
     from unittest import main

@@ -19,8 +19,8 @@ class PathBrowser(ModuleBrowser):
 
     def settitle(self):
         "Set window titles."
-        self.top.wm_title("Path Browser")
-        self.top.wm_iconname("Path Browser")
+        self.top.wm_title("路径查看器")
+        self.top.wm_iconname("路径查看器")
 
     def rootnode(self):
         return PathBrowserTreeItem()
@@ -49,7 +49,7 @@ class DirBrowserTreeItem(TreeItem):
         if not self.packages:
             return self.dir
         else:
-            return self.packages[-1] + ": package"
+            return self.packages[-1] + ": 模块包"
 
     def GetSubList(self):
         try:

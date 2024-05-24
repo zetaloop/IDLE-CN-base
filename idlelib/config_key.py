@@ -44,7 +44,7 @@ def translate_key(key, modifiers):
 class GetKeysDialog(Toplevel):
 
     # Dialog title for invalid key sequence
-    keyerror_title = 'Key Sequence Error'
+    keyerror_title = '快捷键序列有误'
 
     def __init__(self, parent, title, action, current_key_sequences,
                  *, _htest=False, _utest=False):
@@ -106,10 +106,10 @@ class GetKeysDialog(Toplevel):
         frame_buttons = Frame(self)
         frame_buttons.pack(side='bottom', fill='x')
 
-        self.button_ok = Button(frame_buttons, text='OK',
+        self.button_ok = Button(frame_buttons, text='确定',
                                 width=8, command=self.ok)
         self.button_ok.grid(row=0, column=0, padx=5, pady=5)
-        self.button_cancel = Button(frame_buttons, text='Cancel',
+        self.button_cancel = Button(frame_buttons, text='取消',
                                    width=8, command=self.cancel)
         self.button_cancel.grid(row=0, column=1, padx=5, pady=5)
 
@@ -118,7 +118,7 @@ class GetKeysDialog(Toplevel):
         self.frame_keyseq_basic.grid(row=0, column=0, sticky='nsew',
                                       padx=5, pady=5)
         basic_title = Label(self.frame_keyseq_basic,
-                            text=f"New keys for '{self.action}' :")
+                            text=f"为 '{self.action}' 设置快捷键:")
         basic_title.pack(anchor='w')
 
         basic_keys = Label(self.frame_keyseq_basic, justify='left',
@@ -144,12 +144,10 @@ class GetKeysDialog(Toplevel):
 
         # Basic entry help text.
         help_basic = Label(self.frame_controls_basic, justify='left',
-                           text="Select the desired modifier keys\n"+
-                                "above, and the final key from the\n"+
-                                "list on the right.\n\n" +
-                                "Use upper case Symbols when using\n" +
-                                "the Shift modifier.  (Letters will be\n" +
-                                "converted automatically.)")
+                           text="在上方选择修饰键，\n"+
+                                "然后在右侧选择最终键。\n\n" +
+                                "使用 Shift 时需使用大写字母。\n" +
+                                "（我们会自动转换成大写）")
         help_basic.grid(row=1, column=0, columnspan=4, padx=2, sticky='w')
 
         # Basic entry key list.
@@ -164,7 +162,7 @@ class GetKeysDialog(Toplevel):
         self.list_keys_final.config(yscrollcommand=scroll_keys_final.set)
         scroll_keys_final.grid(row=0, column=5, rowspan=4, sticky='ns')
         self.button_clear = Button(self.frame_controls_basic,
-                                   text='Clear Keys',
+                                   text='清除按键',
                                    command=self.clear_key_seq)
         self.button_clear.grid(row=2, column=0, columnspan=4)
 
@@ -173,8 +171,8 @@ class GetKeysDialog(Toplevel):
         self.frame_keyseq_advanced.grid(row=0, column=0, sticky='nsew',
                                          padx=5, pady=5)
         advanced_title = Label(self.frame_keyseq_advanced, justify='left',
-                               text=f"Enter new binding(s) for '{self.action}' :\n" +
-                                     "(These bindings will not be checked for validity!)")
+                               text=f"为 '{self.action}' 设置绑定:\n" +
+                                     "（不会自动检查正确性！）")
         advanced_title.pack(anchor='w')
         self.advanced_keys = Entry(self.frame_keyseq_advanced,
                                    textvariable=self.key_string)
@@ -184,20 +182,19 @@ class GetKeysDialog(Toplevel):
         self.frame_help_advanced = Frame(frame)
         self.frame_help_advanced.grid(row=1, column=0, sticky='nsew', padx=5)
         help_advanced = Label(self.frame_help_advanced, justify='left',
-            text="Key bindings are specified using Tkinter keysyms as\n"+
-                 "in these samples: <Control-f>, <Shift-F2>, <F12>,\n"
-                 "<Control-space>, <Meta-less>, <Control-Alt-Shift-X>.\n"
-                 "Upper case is used when the Shift modifier is present!\n\n" +
-                 "'Emacs style' multi-keystroke bindings are specified as\n" +
-                 "follows: <Control-x><Control-y>, where the first key\n" +
-                 "is the 'do-nothing' keybinding.\n\n" +
-                 "Multiple separate bindings for one action should be\n"+
-                 "separated by a space, eg., <Alt-v> <Meta-v>." )
+            text="快捷键绑定是 Tkinter 的快捷键符号，如下所示：\n"+
+                 "<Control-f>, <Shift-F2>, <F12>, <Control-space>,\n"
+                 "<Meta-less>, <Control-Alt-Shift-X>。\n"
+                 "使用 Shift 修饰键时，字母键需要用大写字母！\n\n" +
+                 "Emacs 风格的连击快捷键绑定需要如下指定：\n" +
+                 "<Control-x><Control-y>，其中第一个键不触发功能。\n\n" +
+                 "为一个操作指定多个快捷键，需要用空格分隔，例如\n"+
+                 "<Alt-v> <Meta-v>。" )
         help_advanced.grid(row=0, column=0, sticky='nsew')
 
         # Switch between basic and advanced.
         self.button_level = Button(frame, command=self.toggle_level,
-                                  text='<< Basic Key Binding Entry')
+                                  text='<< 基础快捷键绑定')
         self.button_level.grid(row=2, column=0, stick='ew', padx=5, pady=5)
         self.toggle_level()
 
@@ -217,16 +214,16 @@ class GetKeysDialog(Toplevel):
 
     def toggle_level(self):
         "Toggle between basic and advanced keys."
-        if  self.button_level.cget('text').startswith('Advanced'):
+        if  self.button_level.cget('text').startswith('高级'):
             self.clear_key_seq()
-            self.button_level.config(text='<< Basic Key Binding Entry')
+            self.button_level.config(text='<< 基础快捷键绑定')
             self.frame_keyseq_advanced.lift()
             self.frame_help_advanced.lift()
             self.advanced_keys.focus_set()
             self.advanced = True
         else:
             self.clear_key_seq()
-            self.button_level.config(text='Advanced Key Binding Entry >>')
+            self.button_level.config(text='高级快捷键绑定 >>')
             self.frame_keyseq_basic.lift()
             self.frame_controls_basic.lift()
             self.advanced = False
@@ -258,10 +255,11 @@ class GetKeysDialog(Toplevel):
         self.key_string.set('')
 
     def ok(self, event=None):
+        
         keys = self.key_string.get().strip()
         if not keys:
             self.showerror(title=self.keyerror_title, parent=self,
-                           message="No key specified.")
+                           message="未指定按键。")
             return
         if (self.advanced or self.keys_ok(keys)) and self.bind_ok(keys):
             self.result = keys
@@ -286,19 +284,18 @@ class GetKeysDialog(Toplevel):
                              for key in keylist]
         if not keys.endswith('>'):
             self.showerror(title, parent=self,
-                           message='Missing the final Key')
+                           message='缺少最终键。')
         elif (not modifiers
               and final_key not in FUNCTION_KEYS + MOVE_KEYS):
             self.showerror(title=title, parent=self,
-                           message='No modifier key(s) specified.')
+                           message='未指定修饰键。')
         elif (modifiers == ['Shift']) \
                  and (final_key not in
                       FUNCTION_KEYS + MOVE_KEYS + ('Tab', 'Space')):
-            msg = 'The shift modifier by itself may not be used with'\
-                  ' this key symbol.'
+            msg = 'Shift 修饰键无法单独与该键一起使用。'
             self.showerror(title=title, parent=self, message=msg)
         elif keys in key_sequences:
-            msg = 'This key combination is already in use.'
+            msg = '该快捷键已被占用。'
             self.showerror(title=title, parent=self, message=msg)
         else:
             return True
@@ -311,8 +308,8 @@ class GetKeysDialog(Toplevel):
         except TclError as err:
             self.showerror(
                     title=self.keyerror_title, parent=self,
-                    message=(f'The entered key sequence is not accepted.\n\n'
-                             f'Error: {err}'))
+                    message=(f'输入的快捷键序列有误。\n\n'
+                             f'错误: {err}'))
             return False
         else:
             self.unbind(keys, binding)

@@ -131,8 +131,8 @@ class Debugger:
         self.flist = pyshell.flist
         self.root = root = pyshell.root
         self.top = top = ListedToplevel(root)
-        self.top.wm_title("Debug Control")
-        self.top.wm_iconname("Debug")
+        self.top.wm_title("调试控制器")
+        self.top.wm_iconname("调试")
         top.wm_protocol("WM_DELETE_WINDOW", self.close)
         self.top.bind("<Escape>", self.close)
         #
@@ -140,15 +140,15 @@ class Debugger:
         self.bframe.pack(anchor="w")
         self.buttons = bl = []
         #
-        self.bcont = b = Button(bframe, text="Go", command=self.cont)
+        self.bcont = b = Button(bframe, text="运行", command=self.cont)
         bl.append(b)
-        self.bstep = b = Button(bframe, text="Step", command=self.step)
+        self.bstep = b = Button(bframe, text="运行一步", command=self.step)
         bl.append(b)
-        self.bnext = b = Button(bframe, text="Over", command=self.next)
+        self.bnext = b = Button(bframe, text="运行一行", command=self.next)
         bl.append(b)
-        self.bret = b = Button(bframe, text="Out", command=self.ret)
+        self.bret = b = Button(bframe, text="运行当前函数", command=self.ret)
         bl.append(b)
-        self.bret = b = Button(bframe, text="Quit", command=self.quit)
+        self.bret = b = Button(bframe, text="停止", command=self.quit)
         bl.append(b)
         #
         for b in bl:
@@ -162,23 +162,23 @@ class Debugger:
             self.__class__.vstack = BooleanVar(top)
             self.vstack.set(1)
         self.bstack = Checkbutton(cframe,
-            text="Stack", command=self.show_stack, variable=self.vstack)
+            text="函数堆栈", command=self.show_stack, variable=self.vstack)
         self.bstack.grid(row=0, column=0)
         if not self.vsource:
             self.__class__.vsource = BooleanVar(top)
         self.bsource = Checkbutton(cframe,
-            text="Source", command=self.show_source, variable=self.vsource)
+            text="代码文件", command=self.show_source, variable=self.vsource)
         self.bsource.grid(row=0, column=1)
         if not self.vlocals:
             self.__class__.vlocals = BooleanVar(top)
             self.vlocals.set(1)
         self.blocals = Checkbutton(cframe,
-            text="Locals", command=self.show_locals, variable=self.vlocals)
+            text="局部变量", command=self.show_locals, variable=self.vlocals)
         self.blocals.grid(row=1, column=0)
         if not self.vglobals:
             self.__class__.vglobals = BooleanVar(top)
         self.bglobals = Checkbutton(cframe,
-            text="Globals", command=self.show_globals, variable=self.vglobals)
+            text="全局变量", command=self.show_globals, variable=self.vglobals)
         self.bglobals.grid(row=1, column=1)
         #
         self.status = Label(top, anchor="w")
@@ -317,7 +317,7 @@ class Debugger:
         lv = self.localsviewer
         if self.vlocals.get():
             if not lv:
-                self.localsviewer = NamespaceViewer(self.flocals, "Locals")
+                self.localsviewer = NamespaceViewer(self.flocals, "局部变量")
         else:
             if lv:
                 self.localsviewer = None
@@ -329,7 +329,7 @@ class Debugger:
         gv = self.globalsviewer
         if self.vglobals.get():
             if not gv:
-                self.globalsviewer = NamespaceViewer(self.fglobals, "Globals")
+                self.globalsviewer = NamespaceViewer(self.fglobals, "全局变量")
         else:
             if gv:
                 self.globalsviewer = None
@@ -402,9 +402,9 @@ class StackViewer(ScrolledList):
             sourceline = linecache.getline(filename, lineno)
             sourceline = sourceline.strip()
             if funcname in ("?", "", None):
-                item = "%s, line %d: %s" % (modname, lineno, sourceline)
+                item = "%s，第%d行：%s" % (modname, lineno, sourceline)
             else:
-                item = "%s.%s(), line %d: %s" % (modname, funcname,
+                item = "%s.%s()，第%d行：%s" % (modname, funcname,
                                                  lineno, sourceline)
             if i == index:
                 item = "> " + item
@@ -420,9 +420,9 @@ class StackViewer(ScrolledList):
     def fill_menu(self):
         "override base method"
         menu = self.menu
-        menu.add_command(label="Go to source line",
+        menu.add_command(label="前往对应的代码",
                          command=self.goto_source_line)
-        menu.add_command(label="Show stack frame",
+        menu.add_command(label="显示堆栈帧",
                          command=self.show_stack_frame)
 
     def on_select(self, index):
@@ -495,7 +495,7 @@ class NamespaceViewer:
             c.destroy()
         self.dict = None
         if not dict:
-            l = Label(subframe, text="None")
+            l = Label(subframe, text="无")
             l.grid(row=0, column=0)
         else:
             #names = sorted(dict)
