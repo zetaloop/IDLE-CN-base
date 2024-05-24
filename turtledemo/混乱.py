@@ -1,8 +1,8 @@
-# File: tdemo_chaos.py
-# Author: Gregor Lingl
-# Date: 2009-06-24
+# 文件: 混乱.py
+# 作者: Gregor Lingl
+# 日期: 2009-06-24
 
-# A demonstration of chaos
+# 一个混乱的演示
 
 from turtle import *
 
@@ -52,7 +52,7 @@ def main():
     # Now zoom in:
     for s in range(100):
         setworldcoordinates(0.5*s,-0.1, N+1, 1.1)
-    return "Done!"
+    return "完成!"
 
 if __name__ == "__main__":
     main()

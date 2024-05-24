@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
-"""       turtle-example-suite:
+"""     海龟画图演示套装:
 
-            tdemo_paint.py
+             画图.py
 
-A simple  event-driven paint program
+一个简单的事件驱动的画图程序
 
-- left mouse button moves turtle
-- middle mouse button changes color
-- right mouse button toggles between pen up
-(no line drawn when the turtle moves) and
-pen down (line is drawn). If pen up follows
-at least two pen-down moves, the polygon that
-includes the starting point is filled.
- -------------------------------------------
- Play around by clicking into the canvas
- using all three mouse buttons.
- -------------------------------------------
-          To exit press STOP button
- -------------------------------------------
+- 左键移动海龟
+- 中间改变颜色
+- 右键切换提笔和落笔
+（提笔就是移动的时候不画线）
+（落笔就是画线）
+如果落笔后移动了至少两步，在提笔后
+每一步构成的多边形将被填充颜色。
+ ----------------------------------
+ 使用三个鼠标按键点击画布进行操作。
+ ----------------------------------
+          点击停止按钮退出
+ ----------------------------------
 """
 from turtle import *
 
