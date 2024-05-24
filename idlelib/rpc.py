@@ -109,12 +109,12 @@ class RPCServer(socketserver.TCPServer):
         except:
             erf = sys.__stderr__
             print('\n' + '-'*40, file=erf)
-            print('Unhandled server exception!', file=erf)
-            print('Thread: %s' % threading.current_thread().name, file=erf)
-            print('Client Address: ', client_address, file=erf)
-            print('Request: ', repr(request), file=erf)
+            print('未处理的服务器异常!', file=erf)
+            print('线程: %s' % threading.current_thread().name, file=erf)
+            print('客户端地址: ', client_address, file=erf)
+            print('请求: ', repr(request), file=erf)
             traceback.print_exc(file=erf)
-            print('\n*** Unrecoverable, server exiting!', file=erf)
+            print('\n*** 无法恢复，服务器退出!', file=erf)
             print('-'*40, file=erf)
             os._exit(0)
 
@@ -207,8 +207,8 @@ class SocketIO:
         except Exception as ex:
             return ("CALLEXC", ex)
         except:
-            msg = "*** Internal Error: rpc.py:SocketIO.localcall()\n\n"\
-                  " Object: %s \n Method: %s \n Args: %s\n"
+            msg = "*** 内部错误: rpc.py:SocketIO.localcall()\n\n"\
+                  " 对象: %s \n 方法: %s \n 参数: %s\n"
             print(msg % (oid, method, args), file=sys.__stderr__)
             traceback.print_exc(file=sys.__stderr__)
             return ("EXCEPTION", None)
@@ -334,7 +334,7 @@ class SocketIO:
         try:
             s = dumps(message)
         except pickle.PicklingError:
-            print("Cannot pickle:", repr(message), file=sys.__stderr__)
+            print("无法序列化:", repr(message), file=sys.__stderr__)
             raise
         s = struct.pack("<i", len(s)) + s
         while len(s) > 0:
@@ -342,7 +342,7 @@ class SocketIO:
                 r, w, x = select.select([], [self.sock], [])
                 n = self.sock.send(s[:BUFSIZE])
             except (AttributeError, TypeError):
-                raise OSError("socket no longer exists")
+                raise OSError("套接字不存在")
             s = s[n:]
 
     buff = b''
@@ -388,7 +388,7 @@ class SocketIO:
             message = pickle.loads(packet)
         except pickle.UnpicklingError:
             print("-----------------------", file=sys.__stderr__)
-            print("cannot unpickle packet:", repr(packet), file=sys.__stderr__)
+            print("无法反序列化包:", repr(packet), file=sys.__stderr__)
             traceback.print_stack(file=sys.__stderr__)
             print("-----------------------", file=sys.__stderr__)
             raise
@@ -536,11 +536,11 @@ class RPCClient(SocketIO):
     def accept(self):
         working_sock, address = self.listening_sock.accept()
         if self.debugging:
-            print("****** Connection request from ", address, file=sys.__stderr__)
+            print("****** 连接请求发自 ", address, file=sys.__stderr__)
         if address[0] == LOCALHOST:
             SocketIO.__init__(self, working_sock)
         else:
-            print("** Invalid host: ", address, file=sys.__stderr__)
+            print("** 无效主机: ", address, file=sys.__stderr__)
             raise OSError
 
     def get_remote_proxy(self, oid):

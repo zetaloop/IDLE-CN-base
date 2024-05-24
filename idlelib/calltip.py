@@ -148,8 +148,8 @@ _MAX_COLS = 85
 _MAX_LINES = 5  # enough for bytes
 _INDENT = ' '*4  # for wrapped signatures
 _first_param = re.compile(r'(?<=\()\w*\,?\s*')
-_default_callable_argspec = "See source or doc"
-_invalid_method = "invalid method signature"
+_default_callable_argspec = "见源码或文档"
+_invalid_method = "无效的方法签名"
 
 def get_argspec(ob):
     '''Return a string describing the signature of a callable object, or ''.
