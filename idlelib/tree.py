@@ -32,7 +32,7 @@ except NameError:
 if os.path.isdir(_icondir):
     ICONDIR = _icondir
 elif not os.path.isdir(ICONDIR):
-    raise RuntimeError(f"can't find icon directory ({ICONDIR!r})")
+    raise RuntimeError(f"找不到图标目录 ({ICONDIR!r})")
 
 def listicons(icondir=ICONDIR):
     """Utility to display the available icons."""
@@ -199,7 +199,7 @@ class TreeNode:
 
     def draw(self, x, y):
         # XXX This hard-codes too many geometry constants!
-        dy = 20
+        dy = 30 # IDLE-CN: 20 will cause incomplete display on my computer
         self.x, self.y = x, y
         self.drawicon()
         self.drawtext()
@@ -210,7 +210,7 @@ class TreeNode:
             sublist = self.item._GetSubList()
             if not sublist:
                 # _IsExpandable() was mistaken; that's allowed
-                return y+17
+                return y+30 # IDLE-CN: 17->30
             for item in sublist:
                 child = self.__class__(self.canvas, self, item)
                 self.children.append(child)
