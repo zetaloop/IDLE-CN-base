@@ -107,10 +107,9 @@ def preferTabsPreferenceWarning():
     prefs = readSystemPreferences()
     if prefs and prefs.get('AppleWindowTabbingMode') == 'always':
         return (
-            'WARNING: The system preference "Prefer tabs when opening'
-            ' documents" is set to "Always". This will cause various problems'
-            ' with IDLE. For the best experience, change this setting when'
-            ' running IDLE (via System Preferences -> Dock).'
+            '警告: 系统设置中 "打开文稿时首选标签页" 已设为 "始终"，'
+            '这会导致 IDLE 出现兼容问题。为了获得最佳体验，请在运行'
+            ' IDLE 时更改此设置（系统设置 -> 桌面与程序坞）。'
         )
     return None
 
@@ -205,7 +204,7 @@ def overrideRootMenu(root, flist):
         # on an EditorWindow instance that is then passed as the first
         # argument to ConfigDialog)
         root.instance_dict = flist.inversedict
-        configdialog.ConfigDialog(root, 'Settings')
+        configdialog.ConfigDialog(root, '设置')
 
     def help_dialog(event=None):
         "Handle Help 'IDLE Help' event."
@@ -231,7 +230,7 @@ def overrideRootMenu(root, flist):
         menubar.add_cascade(label='IDLE', menu=menu)
         mainmenu.menudefs.insert(0,
             ('application', [
-                ('About IDLE', '<<about-idle>>'),
+                ('关于 IDLE', '<<about-idle>>'),
                     None,
                 ]))
     if isCocoaTk():

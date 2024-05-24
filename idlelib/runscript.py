@@ -22,14 +22,14 @@ from idlelib import pyshell
 from idlelib.query import CustomRun
 from idlelib import outwin
 
-indent_message = """Error: Inconsistent indentation detected!
+indent_message = """错误: 检测到缩进不一致！
 
-1) Your indentation is outright incorrect (easy to fix), OR
+1) 你的缩进完全不对（但这个很好修复），或者
 
-2) Your indentation mixes tabs and spaces.
+2) 你的缩进混用了制表符和空格。
 
-To fix case 2, change all tabs to spaces by using Edit->Select All followed \
-by Format->Untabify Region and specify the number of columns used by each tab.
+要修复后者，可以把所有制表符都改成空格。
+在编辑器中选择 编辑->全选，然后执行 格式->制表符转空格，设定制表符对应的空格个数。
 """
 
 
@@ -66,13 +66,13 @@ class ScriptBinding:
             except tokenize.TokenError as msg:
                 msgtxt, (lineno, start) = msg.args
                 self.editwin.gotoline(lineno)
-                self.errorbox("Tabnanny Tokenizing Error",
-                              "Token Error: %s" % msgtxt)
+                self.errorbox("Tabnanny 分词错误",
+                              "词元错误: %s" % msgtxt)
                 return False
             except tabnanny.NannyNag as nag:
                 # The error messages from tabnanny are too confusing...
                 self.editwin.gotoline(nag.get_lineno())
-                self.errorbox("Tab/space error", indent_message)
+                self.errorbox("缩进或空格错误", indent_message)
                 return False
         return True
 
@@ -94,14 +94,14 @@ class ScriptBinding:
             # If successful, return the compiled code
             return compile(source, filename, "exec")
         except (SyntaxError, OverflowError, ValueError) as value:
-            msg = getattr(value, 'msg', '') or value or "<no detail available>"
+            msg = getattr(value, 'msg', '') or value or "<没有详细信息>"
             lineno = getattr(value, 'lineno', '') or 1
             offset = getattr(value, 'offset', '') or 0
             if offset == 0:
                 lineno += 1  #mark end of offending line
             pos = "0.0 + %d lines + %d chars" % (lineno-1, offset-1)
             editwin.colorize_syntax_error(text, pos)
-            self.errorbox("SyntaxError", "%-20s" % msg)
+            self.errorbox("语法错误", "%-20s" % msg)
             return False
         finally:
             shell.set_warning_stream(saved_stream)
@@ -132,7 +132,7 @@ class ScriptBinding:
         if not self.tabnanny(filename):
             return 'break'
         if customize:
-            title = f"Customize {self.editwin.short_title()} Run"
+            title = f"自定义运行 {self.editwin.short_title()}"
             run_args = CustomRun(self.shell.text, title,
                                  cli_args=self.cli_args).result
             if not run_args:  # User cancelled.
@@ -194,8 +194,8 @@ class ScriptBinding:
         return filename
 
     def ask_save_dialog(self):
-        msg = "Source Must Be Saved\n" + 5*' ' + "OK to Save?"
-        confirm = messagebox.askokcancel(title="Save Before Run or Check",
+        msg = "运行代码前需要保存文件\n" + "确定保存？"
+        confirm = messagebox.askokcancel(title="运行前保存",
                                            message=msg,
                                            default=messagebox.OK,
                                            parent=self.editwin.text)

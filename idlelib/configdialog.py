@@ -68,7 +68,7 @@ class ConfigDialog(Toplevel):
         if not _utest:
             self.withdraw()
 
-        self.title(title or 'IDLE Preferences')
+        self.title(title or 'IDLE 设置')
         x = parent.winfo_rootx() + 20
         y = parent.winfo_rooty() + (30 if not _htest else 150)
         self.geometry(f'+{x}+{y}')
@@ -121,12 +121,12 @@ class ConfigDialog(Toplevel):
         self.winpage = WinPage(note)
         self.shedpage = ShedPage(note)
 
-        note.add(self.fontpage, text=' Fonts ')
-        note.add(self.highpage, text='Highlights')
-        note.add(self.keyspage, text=' Keys ')
-        note.add(self.winpage, text=' Windows ')
-        note.add(self.shedpage, text=' Shell/Ed ')
-        note.add(self.extpage, text='Extensions')
+        note.add(self.fontpage, text=' 字体 ')
+        note.add(self.highpage, text=' 主题 ')
+        note.add(self.keyspage, text=' 按键 ')
+        note.add(self.winpage, text=' 窗口 ')
+        note.add(self.shedpage, text=' 界面 ')
+        note.add(self.extpage, text=' 插件 ')
         note.enable_traversal()
         note.pack(side=TOP, expand=TRUE, fill=BOTH)
         self.create_action_buttons().pack(side=BOTTOM)
@@ -159,10 +159,10 @@ class ConfigDialog(Toplevel):
         buttons_frame = Frame(outer, padding=2)
         self.buttons = {}
         for txt, cmd in (
-            ('Ok', self.ok),
-            ('Apply', self.apply),
-            ('Cancel', self.cancel),
-            ('Help', self.help)):
+            ('确定', self.ok),
+            ('应用', self.apply),
+            ('取消', self.cancel),
+            ('帮助', self.help)):
             self.buttons[txt] = Button(buttons_frame, text=txt, command=cmd,
                        takefocus=FALSE, **padding_args)
             self.buttons[txt].pack(side=LEFT, padx=5)
@@ -207,7 +207,7 @@ class ConfigDialog(Toplevel):
             view_text: Method from textview module.
         """
         page = self.note.tab(self.note.select(), option='text').strip()
-        view_text(self, title='Help for IDLE preferences',
+        view_text(self, title='IDLE 设置帮助',
                   contents=help_common+help_pages.get(page, ''))
 
     def deactivate_current_config(self):
@@ -330,14 +330,14 @@ class FontPage(Frame):
 
         # Define frames and widgets.
         frame_font = LabelFrame(self, borderwidth=2, relief=GROOVE,
-                                text=' Shell/Editor Font ')
+                                text=' 文本字体 ')
         frame_sample = LabelFrame(self, borderwidth=2, relief=GROOVE,
-                                  text=' Font Sample (Editable) ')
+                                  text=' 样例（可编辑） ')
         # frame_font.
         frame_font_name = Frame(frame_font)
         frame_font_param = Frame(frame_font)
         font_name_title = Label(
-                frame_font_name, justify=LEFT, text='Font Face :')
+                frame_font_name, justify=LEFT, text='字体 :')
         self.fontlist = Listbox(frame_font_name, height=15,
                                 takefocus=True, exportselection=FALSE)
         self.fontlist.bind('<ButtonRelease-1>', self.on_fontlist_select)
@@ -346,11 +346,11 @@ class FontPage(Frame):
         scroll_font = Scrollbar(frame_font_name)
         scroll_font.config(command=self.fontlist.yview)
         self.fontlist.config(yscrollcommand=scroll_font.set)
-        font_size_title = Label(frame_font_param, text='Size :')
+        font_size_title = Label(frame_font_param, text='字号 :')
         self.sizelist = DynOptionMenu(frame_font_param, self.font_size, None)
         self.bold_toggle = Checkbutton(
                 frame_font_param, variable=self.font_bold,
-                onvalue=1, offvalue=0, text='Bold')
+                onvalue=1, offvalue=0, text='粗体')
         # frame_sample.
         font_sample_frame = ScrollableTextFrame(frame_sample)
         self.font_sample = font_sample_frame.text
@@ -577,22 +577,22 @@ class HighPage(Frame):
         """
         self.theme_elements = {
             # Display-name: internal-config-tag-name.
-            'Normal Code or Text': 'normal',
-            'Code Context': 'context',
-            'Python Keywords': 'keyword',
-            'Python Definitions': 'definition',
-            'Python Builtins': 'builtin',
-            'Python Comments': 'comment',
-            'Python Strings': 'string',
-            'Selected Text': 'hilite',
-            'Found Text': 'hit',
-            'Cursor': 'cursor',
-            'Editor Breakpoint': 'break',
-            'Shell Prompt': 'console',
-            'Error Text': 'error',
-            'Shell User Output': 'stdout',
-            'Shell User Exception': 'stderr',
-            'Line Number': 'linenumber',
+            '一般代码文本': 'normal',
+            '代码上下文': 'context',
+            'Python 关键词': 'keyword',
+            'Python 定义': 'definition',
+            'Python 内置对象': 'builtin',
+            'Python 注释': 'comment',
+            'Python 字符串': 'string',
+            '选中文本': 'hilite',
+            '查找结果': 'hit',
+            '光标': 'cursor',
+            '编辑器断点': 'break',
+            '命令行提示符': 'console',
+            '报错代码': 'error',
+            '命令行输出': 'stdout',
+            '命令行报错': 'stderr',
+            '行号': 'linenumber',
             }
         self.builtin_name = tracers.add(
                 StringVar(self), self.var_changed_builtin_name)
@@ -609,9 +609,9 @@ class HighPage(Frame):
         # Create widgets:
         # body frame and section frames.
         frame_custom = LabelFrame(self, borderwidth=2, relief=GROOVE,
-                                  text=' Custom Highlighting ')
+                                  text=' 自定义颜色 ')
         frame_theme = LabelFrame(self, borderwidth=2, relief=GROOVE,
-                                 text=' Highlighting Theme ')
+                                 text=' 颜色主题 ')
         # frame_custom.
         sample_frame = ScrollableTextFrame(
                 frame_custom, relief=SOLID, borderwidth=1)
@@ -623,15 +623,15 @@ class HighPage(Frame):
         text.bind('<Double-Button-1>', lambda e: 'break')
         text.bind('<B1-Motion>', lambda e: 'break')
         string_tags=(
-            ('# Click selects item.', 'comment'), ('\n', 'normal'),
+            ('# 点击选择要更改的类别', 'comment'), ('\n', 'normal'),
             ('code context section', 'context'), ('\n', 'normal'),
-            ('| cursor', 'cursor'), ('\n', 'normal'),
+            ('| 光标', 'cursor'), ('\n', 'normal'),
             ('def', 'keyword'), (' ', 'normal'),
             ('func', 'definition'), ('(param):\n  ', 'normal'),
-            ('"Return None."', 'string'), ('\n  var0 = ', 'normal'),
-            ("'string'", 'string'), ('\n  var1 = ', 'normal'),
-            ("'selected'", 'hilite'), ('\n  var2 = ', 'normal'),
-            ("'found'", 'hit'), ('\n  var3 = ', 'normal'),
+            ('"返回 None"', 'string'), ('\n  var0 = ', 'normal'),
+            ("'字符串'", 'string'), ('\n  var1 = ', 'normal'),
+            ("'被选中的'", 'hilite'), ('\n  var2 = ', 'normal'),
+            ("'查找到的'", 'hit'), ('\n  var3 = ', 'normal'),
             ('list', 'builtin'), ('(', 'normal'),
             ('None', 'keyword'), (')\n', 'normal'),
             ('  breakpoint("line")', 'break'), ('\n\n', 'normal'),
@@ -659,35 +659,35 @@ class HighPage(Frame):
         self.frame_color_set = Frame(frame_custom, style='frame_color_set.TFrame')
         frame_fg_bg_toggle = Frame(frame_custom)
         self.button_set_color = Button(
-                self.frame_color_set, text='Choose Color for :',
+                self.frame_color_set, text='点击选择颜色 :',
                 command=self.get_color)
         self.targetlist = DynOptionMenu(
                 self.frame_color_set, self.highlight_target, None,
                 highlightthickness=0) #, command=self.set_highlight_targetBinding
         self.fg_on = Radiobutton(
                 frame_fg_bg_toggle, variable=self.fg_bg_toggle, value=1,
-                text='Foreground', command=self.set_color_sample_binding)
+                text='文字颜色', command=self.set_color_sample_binding)
         self.bg_on = Radiobutton(
                 frame_fg_bg_toggle, variable=self.fg_bg_toggle, value=0,
-                text='Background', command=self.set_color_sample_binding)
+                text='背景颜色', command=self.set_color_sample_binding)
         self.fg_bg_toggle.set(1)
         self.button_save_custom = Button(
-                frame_custom, text='Save as New Custom Theme',
+                frame_custom, text='保存为新的自定义主题',
                 command=self.save_as_new_theme)
         # frame_theme.
-        theme_type_title = Label(frame_theme, text='Select : ')
+        theme_type_title = Label(frame_theme, text='选择 : ')
         self.builtin_theme_on = Radiobutton(
                 frame_theme, variable=self.theme_source, value=1,
-                command=self.set_theme_type, text='a Built-in Theme')
+                command=self.set_theme_type, text='内置主题')
         self.custom_theme_on = Radiobutton(
                 frame_theme, variable=self.theme_source, value=0,
-                command=self.set_theme_type, text='a Custom Theme')
+                command=self.set_theme_type, text='自定义主题')
         self.builtinlist = DynOptionMenu(
                 frame_theme, self.builtin_name, None, command=None)
         self.customlist = DynOptionMenu(
                 frame_theme, self.custom_name, None, command=None)
         self.button_delete_custom = Button(
-                frame_theme, text='Delete Custom Theme',
+                frame_theme, text='删除自定义主题',
                 command=self.delete_custom)
         self.theme_message = Label(frame_theme, borderwidth=2)
         # Pack widgets:
@@ -747,7 +747,7 @@ class HighPage(Frame):
             item_list.sort()
             if not item_list:
                 self.custom_theme_on.state(('disabled',))
-                self.custom_name.set('- no custom themes -')
+                self.custom_name.set('- 无自定义主题 -')
             else:
                 self.customlist.SetMenu(item_list, item_list[0])
         else:  # User theme selected.
@@ -770,13 +770,13 @@ class HighPage(Frame):
         Add the changed theme's name to the changed_items and recreate
         the sample with the values from the selected theme.
         """
-        old_themes = ('IDLE Classic', 'IDLE New')
+        old_themes = ('IDLE 经典', 'IDLE 新式')
         value = self.builtin_name.get()
         if value not in old_themes:
             if idleConf.GetOption('main', 'Theme', 'name') not in old_themes:
                 changes.add_option('main', 'Theme', 'name', old_themes[0])
             changes.add_option('main', 'Theme', 'name2', value)
-            self.theme_message['text'] = 'New theme, see Help'
+            self.theme_message['text'] = '新版主题，详见帮助'
         else:
             changes.add_option('main', 'Theme', 'name', value)
             changes.add_option('main', 'Theme', 'name2', '')
@@ -790,7 +790,7 @@ class HighPage(Frame):
         changed_items and apply the theme to the sample.
         """
         value = self.custom_name.get()
-        if value != '- no custom themes -':
+        if value != '- 无自定义主题 -':
             changes.add_option('main', 'Theme', 'name', value)
             self.paint_theme_sample()
 
@@ -865,13 +865,13 @@ class HighPage(Frame):
         prev_color = self.style.lookup(self.frame_color_set['style'],
                                        'background')
         rgbTuplet, color_string = colorchooser.askcolor(
-                parent=self, title='Pick new color for : '+target,
+                parent=self, title='选取颜色 : '+target,
                 initialcolor=prev_color)
         if color_string and (color_string != prev_color):
             # User didn't cancel and they chose a new color.
             if self.theme_source.get():  # Current theme is a built-in.
-                message = ('Your changes will be saved as a new Custom Theme. '
-                           'Enter a name for your new Custom Theme below.')
+                message = ('改动将被保存为新的自定义主题。'
+                           '请在下方输入新主题的名称。')
                 new_theme = self.get_new_theme_name(message)
                 if not new_theme:  # User cancelled custom theme creation.
                     return
@@ -897,7 +897,7 @@ class HighPage(Frame):
         used_names = (idleConf.GetSectionList('user', 'highlight') +
                 idleConf.GetSectionList('default', 'highlight'))
         new_theme = SectionName(
-                self, 'New Custom Theme', message, used_names).result
+                self, '新的自定义主题', message, used_names).result
         return new_theme
 
     def save_as_new_theme(self):
@@ -907,7 +907,7 @@ class HighPage(Frame):
             get_new_theme_name
             create_new
         """
-        new_theme_name = self.get_new_theme_name('New Theme Name:')
+        new_theme_name = self.get_new_theme_name('主题名称:')
         if new_theme_name:
             self.create_new(new_theme_name)
 
@@ -969,7 +969,7 @@ class HighPage(Frame):
             var_changed_highlight_target
             load_theme_cfg
         """
-        if self.highlight_target.get() == 'Cursor':  # bg not possible
+        if self.highlight_target.get() == '光标':  # bg not possible
             self.fg_on.state(('disabled',))
             self.bg_on.state(('disabled',))
             self.fg_bg_toggle.set(1)
@@ -1083,9 +1083,9 @@ class HighPage(Frame):
             set_theme_type
         """
         theme_name = self.custom_name.get()
-        delmsg = 'Are you sure you wish to delete the theme %r ?'
+        delmsg = '确定要删除主题 %r 吗？'
         if not self.askyesno(
-                'Delete Theme',  delmsg % theme_name, parent=self):
+                '删除主题',  delmsg % theme_name, parent=self):
             return
         self.cd.deactivate_current_config()
         # Remove theme from changes, config, and file.
@@ -1095,7 +1095,7 @@ class HighPage(Frame):
         item_list.sort()
         if not item_list:
             self.custom_theme_on.state(('disabled',))
-            self.customlist.SetMenu(item_list, '- no custom themes -')
+            self.customlist.SetMenu(item_list, '- 无自定义主题 -')
         else:
             self.customlist.SetMenu(item_list, item_list[0])
         # Revert to default theme.
@@ -1212,12 +1212,12 @@ class KeysPage(Frame):
         # body and section frames.
         frame_custom = LabelFrame(
                 self, borderwidth=2, relief=GROOVE,
-                text=' Custom Key Bindings ')
+                text=' 自定义快捷键 ')
         frame_key_sets = LabelFrame(
-                self, borderwidth=2, relief=GROOVE, text=' Key Set ')
+                self, borderwidth=2, relief=GROOVE, text=' 快捷键预设 ')
         # frame_custom.
         frame_target = Frame(frame_custom)
-        target_title = Label(frame_target, text='Action - Key(s)')
+        target_title = Label(frame_target, text='操作 - 快捷键')
         scroll_target_y = Scrollbar(frame_target)
         scroll_target_x = Scrollbar(frame_target, orient=HORIZONTAL)
         self.bindingslist = Listbox(
@@ -1229,26 +1229,26 @@ class KeysPage(Frame):
         self.bindingslist['yscrollcommand'] = scroll_target_y.set
         self.bindingslist['xscrollcommand'] = scroll_target_x.set
         self.button_new_keys = Button(
-                frame_custom, text='Get New Keys for Selection',
+                frame_custom, text='设置该操作的快捷键',
                 command=self.get_new_keys, state='disabled')
         # frame_key_sets.
         frames = [Frame(frame_key_sets, padding=2, borderwidth=0)
                   for i in range(2)]
         self.builtin_keyset_on = Radiobutton(
                 frames[0], variable=self.keyset_source, value=1,
-                command=self.set_keys_type, text='Use a Built-in Key Set')
+                command=self.set_keys_type, text='使用内置预设')
         self.custom_keyset_on = Radiobutton(
                 frames[0], variable=self.keyset_source, value=0,
-                command=self.set_keys_type, text='Use a Custom Key Set')
+                command=self.set_keys_type, text='使用自定义预设')
         self.builtinlist = DynOptionMenu(
                 frames[0], self.builtin_name, None, command=None)
         self.customlist = DynOptionMenu(
                 frames[0], self.custom_name, None, command=None)
         self.button_delete_custom_keys = Button(
-                frames[1], text='Delete Custom Key Set',
+                frames[1], text='删除自定义快捷键预设',
                 command=self.delete_custom_keys)
         self.button_save_custom_keys = Button(
-                frames[1], text='Save as New Custom Key Set',
+                frames[1], text='保存自定义快捷键预设',
                 command=self.save_as_new_key_set)
         self.keys_message = Label(frames[0], borderwidth=2)
 
@@ -1293,7 +1293,7 @@ class KeysPage(Frame):
             item_list.sort()
             if not item_list:
                 self.custom_keyset_on.state(('disabled',))
-                self.custom_name.set('- no custom keys -')
+                self.custom_name.set('- 无自定义预设 -')
             else:
                 self.customlist.SetMenu(item_list, item_list[0])
         else:  # User key set selected.
@@ -1311,17 +1311,17 @@ class KeysPage(Frame):
     def var_changed_builtin_name(self, *params):
         "Process selection of builtin key set."
         old_keys = (
-            'IDLE Classic Windows',
-            'IDLE Classic Unix',
-            'IDLE Classic Mac',
-            'IDLE Classic OSX',
+            'IDLE 经典 Windows',
+            'IDLE 经典 Unix',
+            'IDLE 经典 Mac',
+            'IDLE 经典 OSX',
         )
         value = self.builtin_name.get()
         if value not in old_keys:
             if idleConf.GetOption('main', 'Keys', 'name') not in old_keys:
                 changes.add_option('main', 'Keys', 'name', old_keys[0])
             changes.add_option('main', 'Keys', 'name2', value)
-            self.keys_message['text'] = 'New key set, see Help'
+            self.keys_message['text'] = '新版预设，详见帮助'
         else:
             changes.add_option('main', 'Keys', 'name', value)
             changes.add_option('main', 'Keys', 'name2', '')
@@ -1331,7 +1331,7 @@ class KeysPage(Frame):
     def var_changed_custom_name(self, *params):
         "Process selection of custom key set."
         value = self.custom_name.get()
-        if value != '- no custom keys -':
+        if value != '- 无自定义预设 -':
             changes.add_option('main', 'Keys', 'name', value)
             self.load_keys_list(value)
 
@@ -1390,12 +1390,12 @@ class KeysPage(Frame):
             for event in key_set_changes:
                 current_bindings[event] = key_set_changes[event].split()
         current_key_sequences = list(current_bindings.values())
-        new_keys = GetKeysWindow(self, 'Get New Keys', bind_name,
+        new_keys = GetKeysWindow(self, '设置快捷键', bind_name,
                 current_key_sequences).result
         if new_keys:
             if self.keyset_source.get():  # Current key set is a built-in.
-                message = ('Your changes will be saved as a new Custom Key Set.'
-                           ' Enter a name for your new Custom Key Set below.')
+                message = ('改动将被保存为新的自定义快捷键预设。'
+                           ' 请在下方输入新预设的名称。')
                 new_keyset = self.get_new_keys_name(message)
                 if not new_keyset:  # User cancelled custom key set creation.
                     self.bindingslist.select_set(list_index)
@@ -1417,12 +1417,12 @@ class KeysPage(Frame):
         used_names = (idleConf.GetSectionList('user', 'keys') +
                 idleConf.GetSectionList('default', 'keys'))
         new_keyset = SectionName(
-                self, 'New Custom Key Set', message, used_names).result
+                self, '新的自定义快捷键预设', message, used_names).result
         return new_keyset
 
     def save_as_new_key_set(self):
         "Prompt for name of new key set and save changes using that name."
-        new_keys_name = self.get_new_keys_name('New Key Set Name:')
+        new_keys_name = self.get_new_keys_name('预设名称:')
         if new_keys_name:
             self.create_new_key_set(new_keys_name)
 
@@ -1515,9 +1515,9 @@ class KeysPage(Frame):
         deleted from the config file.
         """
         keyset_name = self.custom_name.get()
-        delmsg = 'Are you sure you wish to delete the key set %r ?'
+        delmsg = '确定要删除快捷键预设 %r 吗？'
         if not self.askyesno(
-                'Delete Key Set',  delmsg % keyset_name, parent=self):
+                '删除预设',  delmsg % keyset_name, parent=self):
             return
         self.cd.deactivate_current_config()
         # Remove key set from changes, config, and file.
@@ -1527,7 +1527,7 @@ class KeysPage(Frame):
         item_list.sort()
         if not item_list:
             self.custom_keyset_on.state(('disabled',))
-            self.customlist.SetMenu(item_list, '- no custom keys -')
+            self.customlist.SetMenu(item_list, '- 无自定义预设 -')
         else:
             self.customlist.SetMenu(item_list, item_list[0])
         # Revert to default key set.
@@ -1622,26 +1622,26 @@ class WinPage(Frame):
 
         # Create widgets:
         frame_window = LabelFrame(self, borderwidth=2, relief=GROOVE,
-                                  text=' Window Preferences')
+                                  text=' 窗口配置')
 
         frame_run = Frame(frame_window, borderwidth=0)
-        startup_title = Label(frame_run, text='At Startup')
+        startup_title = Label(frame_run, text='启动时打开')
         self.startup_editor_on = Radiobutton(
                 frame_run, variable=self.startup_edit, value=1,
-                text="Open Edit Window")
+                text="编辑器")
         self.startup_shell_on = Radiobutton(
                 frame_run, variable=self.startup_edit, value=0,
-                text='Open Shell Window')
+                text='命令行')
 
         frame_win_size = Frame(frame_window, borderwidth=0)
         win_size_title = Label(
-                frame_win_size, text='Initial Window Size  (in characters)')
-        win_width_title = Label(frame_win_size, text='Width')
+                frame_win_size, text='初始窗口尺寸（字数）')
+        win_width_title = Label(frame_win_size, text='宽')
         self.win_width_int = Entry(
                 frame_win_size, textvariable=self.win_width, width=3,
                 validatecommand=self.digits_only, validate='key',
         )
-        win_height_title = Label(frame_win_size, text='Height')
+        win_height_title = Label(frame_win_size, text='高')
         self.win_height_int = Entry(
                 frame_win_size, textvariable=self.win_height, width=3,
                 validatecommand=self.digits_only, validate='key',
@@ -1649,7 +1649,7 @@ class WinPage(Frame):
 
         frame_cursor = Frame(frame_window, borderwidth=0)
         indent_title = Label(frame_cursor,
-                             text='Indent spaces (4 is standard)')
+                             text='缩进空格数（标准为4个）')
         try:
             self.indent_chooser = Spinbox(
                     frame_cursor, textvariable=self.indent_spaces,
@@ -1659,34 +1659,34 @@ class WinPage(Frame):
             self.indent_chooser = Combobox(
                     frame_cursor, textvariable=self.indent_spaces,
                     state="readonly", values=list(range(1,11)), width=3)
-        cursor_blink_title = Label(frame_cursor, text='Cursor Blink')
-        self.cursor_blink_bool = Checkbutton(frame_cursor, text="Cursor blink",
+        cursor_blink_title = Label(frame_cursor, text='光标闪烁')
+        self.cursor_blink_bool = Checkbutton(frame_cursor, text="光标闪烁",
                                              variable=self.cursor_blink)
 
         frame_autocomplete = Frame(frame_window, borderwidth=0,)
         auto_wait_title = Label(frame_autocomplete,
-                                text='Completions Popup Wait (milliseconds)')
+                                text='自动完成弹出等待时间（毫秒）')
         self.auto_wait_int = Entry(
                 frame_autocomplete, textvariable=self.autocomplete_wait,
                 width=6, validatecommand=self.digits_only, validate='key')
 
         frame_paren1 = Frame(frame_window, borderwidth=0)
-        paren_style_title = Label(frame_paren1, text='Paren Match Style')
+        paren_style_title = Label(frame_paren1, text='括号显示模式（左边/一对/整块）')
         self.paren_style_type = OptionMenu(
                 frame_paren1, self.paren_style, 'expression',
                 "opener","parens","expression")
         frame_paren2 = Frame(frame_window, borderwidth=0)
         paren_time_title = Label(
-                frame_paren2, text='Time Match Displayed (milliseconds)\n'
-                                  '(0 is until next input)')
+                frame_paren2, text='括号显示时长（毫秒）\n'
+                                  '（0表示一直显示）')
         self.paren_flash_time = Entry(
                 frame_paren2, textvariable=self.flash_delay, width=6,
                 validatecommand=self.digits_only, validate='key')
         self.bell_on = Checkbutton(
-                frame_paren2, text="Bell on Mismatch", variable=self.paren_bell)
+                frame_paren2, text="括号不匹配时响铃", variable=self.paren_bell)
         frame_format = Frame(frame_window, borderwidth=0)
         format_width_title = Label(frame_format,
-                                   text='Format Paragraph Max Width')
+                                   text='格式化最大宽度')
         self.format_width_int = Entry(
                 frame_format, textvariable=self.format_width, width=4,
                 validatecommand=self.digits_only, validate='key',
@@ -1812,13 +1812,13 @@ class ShedPage(Frame):
 
         # Create widgets:
         frame_shell = LabelFrame(self, borderwidth=2, relief=GROOVE,
-                                 text=' Shell Preferences')
+                                 text=' 命令行配置')
         frame_editor = LabelFrame(self, borderwidth=2, relief=GROOVE,
-                                  text=' Editor Preferences')
+                                  text=' 编辑器配置')
         # Frame_shell.
         frame_auto_squeeze_min_lines = Frame(frame_shell, borderwidth=0)
         auto_squeeze_min_lines_title = Label(frame_auto_squeeze_min_lines,
-                                             text='Auto-Squeeze Min. Lines:')
+                                             text='自动折叠最少行数:')
         self.auto_squeeze_min_lines_int = Entry(
                 frame_auto_squeeze_min_lines, width=4,
                 textvariable=self.auto_squeeze_min_lines,
@@ -1826,25 +1826,25 @@ class ShedPage(Frame):
         )
         # Frame_editor.
         frame_save = Frame(frame_editor, borderwidth=0)
-        run_save_title = Label(frame_save, text='At Start of Run (F5)  ')
+        run_save_title = Label(frame_save, text='开始运行代码时 (F5)  ')
 
         self.save_ask_on = Radiobutton(
                 frame_save, variable=self.autosave, value=0,
-                text="Prompt to Save")
+                text="提示保存代码")
         self.save_auto_on = Radiobutton(
                 frame_save, variable=self.autosave, value=1,
-                text='No Prompt')
+                text='不提示')
 
         frame_line_numbers_default = Frame(frame_editor, borderwidth=0)
         line_numbers_default_title = Label(
-            frame_line_numbers_default, text='Show line numbers in new windows')
+            frame_line_numbers_default, text='显示行号')
         self.line_numbers_default_bool = Checkbutton(
                 frame_line_numbers_default,
                 variable=self.line_numbers_default,
                 width=1)
 
         frame_context = Frame(frame_editor, borderwidth=0)
-        context_title = Label(frame_context, text='Max Context Lines :')
+        context_title = Label(frame_context, text='显示上文最多行数 :')
         self.context_int = Entry(
                 frame_context, textvariable=self.context_lines, width=3,
                 validatecommand=self.digits_only, validate='key',
@@ -1921,9 +1921,9 @@ class ExtPage(Frame):
         self.extension_names = StringVar(self)
 
         frame_ext = LabelFrame(self, borderwidth=2, relief=GROOVE,
-                               text=' Feature Extensions ')
+                               text=' 功能插件 ')
         self.frame_help = HelpFrame(self, borderwidth=2, relief=GROOVE,
-                               text=' Help Menu Extensions ')
+                               text=' 帮助菜单 ')
 
         frame_ext.rowconfigure(0, weight=1)
         frame_ext.columnconfigure(2, weight=1)
@@ -2119,13 +2119,13 @@ class HelpFrame(LabelFrame):
 
         frame_buttons = Frame(self)
         self.button_helplist_edit = Button(
-                frame_buttons, text='Edit', state='disabled',
+                frame_buttons, text='编辑', state='disabled',
                 width=8, command=self.helplist_item_edit)
         self.button_helplist_add = Button(
-                frame_buttons, text='Add',
+                frame_buttons, text='添加',
                 width=8, command=self.helplist_item_add)
         self.button_helplist_remove = Button(
-                frame_buttons, text='Remove', state='disabled',
+                frame_buttons, text='删除', state='disabled',
                 width=8, command=self.helplist_item_remove)
 
         # Pack frame_help.
@@ -2160,7 +2160,7 @@ class HelpFrame(LabelFrame):
         Query for name and location of new help sources and add
         them to the list.
         """
-        help_source = HelpSource(self, 'New Help Source').result
+        help_source = HelpSource(self, '添加帮助菜单项').result
         if help_source:
             self.user_helplist.append(help_source)
             self.helplist.insert(END, help_source[0])
@@ -2175,7 +2175,7 @@ class HelpFrame(LabelFrame):
         item_index = self.helplist.index(ANCHOR)
         help_source = self.user_helplist[item_index]
         new_help_source = HelpSource(
-                self, 'Edit Help Source',
+                self, '编辑帮助菜单项',
                 menuitem=help_source[0],
                 filepath=help_source[1],
                 ).result

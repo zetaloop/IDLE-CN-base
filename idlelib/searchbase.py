@@ -26,8 +26,8 @@ class SearchDialogBase:
     add widgets.
     '''
 
-    title = "Search Dialog"  # replace in subclasses
-    icon = "Search"
+    title = "查找"  # replace in subclasses
+    icon = "查找"
     needwrapbutton = 1  # not in Find in Files
 
     def __init__(self, root, engine):
@@ -115,7 +115,7 @@ class SearchDialogBase:
 
     def create_entries(self):
         "Create one or more entry lines with make_entry."
-        self.ent = self.make_entry("Find:", self.engine.patvar)[0]
+        self.ent = self.make_entry("查找:", self.engine.patvar)[0]
 
     def make_frame(self,labeltext=None):
         '''Return (frame, label).
@@ -140,13 +140,13 @@ class SearchDialogBase:
         A gridded frame from make_frame is filled with a Checkbutton
         for each pair, bound to the var, with the corresponding label.
         '''
-        frame = self.make_frame("Options")[0]
+        frame = self.make_frame("选项")[0]
         engine = self.engine
-        options = [(engine.revar, "Regular expression"),
-                   (engine.casevar, "Match case"),
-                   (engine.wordvar, "Whole word")]
+        options = [(engine.revar, "正则表达式"),
+                   (engine.casevar, "区分大小写"),
+                   (engine.wordvar, "全词匹配")]
         if self.needwrapbutton:
-            options.append((engine.wrapvar, "Wrap around"))
+            options.append((engine.wrapvar, "循环查找"))
         for var, label in options:
             btn = Checkbutton(frame, variable=var, text=label)
             btn.pack(side="left", fill="both")
@@ -158,9 +158,9 @@ class SearchDialogBase:
         Others is a list of value, label pairs.
         A gridded frame from make_frame is filled with radio buttons.
         '''
-        frame = self.make_frame("Direction")[0]
+        frame = self.make_frame("方向")[0]
         var = self.engine.backvar
-        others = [(1, 'Up'), (0, 'Down')]
+        others = [(1, '向上'), (0, '向下')]
         for val, label in others:
             btn = Radiobutton(frame, variable=var, value=val, text=label)
             btn.pack(side="left", fill="both")
@@ -181,7 +181,7 @@ class SearchDialogBase:
         f = self.buttonframe = Frame(self.frame)
         f.grid(row=0,column=2,padx=2,pady=2,ipadx=2,ipady=2)
 
-        b = self.make_button("Close", self.close)
+        b = self.make_button("关闭", self.close)
         b.lower()
 
 

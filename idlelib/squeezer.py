@@ -102,13 +102,13 @@ class ExpandingButton(tk.Button):
         # The base Text widget is needed to change text before iomark.
         self.base_text = editwin.per.bottom
 
-        line_plurality = "lines" if numoflines != 1 else "line"
-        button_text = f"Squeezed text ({numoflines} {line_plurality})."
+        line_plurality = "行" if numoflines != 1 else "行"
+        button_text = f"输出已被折叠（共{numoflines}{line_plurality}）"
         tk.Button.__init__(self, text, text=button_text,
                            background="#FFFFC0", activebackground="#FFFFE0")
 
         button_tooltip_text = (
-            "Double-click to expand, right-click for more options."
+            "双击展开，右键更多选项。"
         )
         Hovertip(self, button_tooltip_text, hover_delay=80)
 
@@ -148,12 +148,12 @@ class ExpandingButton(tk.Button):
             self.set_is_dangerous()
         if self.is_dangerous:
             confirm = messagebox.askokcancel(
-                title="Expand huge output?",
+                title="展开超多输出？",
                 message="\n\n".join([
-                    "The squeezed output is very long: %d lines, %d chars.",
-                    "Expanding it could make IDLE slow or unresponsive.",
-                    "It is recommended to view or copy the output instead.",
-                    "Really expand?"
+                    "被折叠的输出非常大：%d行、%d个字符。",
+                    "将它展开可能导致 IDLE 卡顿或者停止响应。",
+                    "推荐右键查看或者复制，而不是直接展开。",
+                    "真的要展开吗？"
                 ]) % (self.numoflines, len(self.s)),
                 default=messagebox.CANCEL,
                 parent=self.text)
@@ -179,13 +179,13 @@ class ExpandingButton(tk.Button):
 
         View the original text in a separate text viewer window.
         """
-        view_text(self.text, "Squeezed Output Viewer", self.s,
+        view_text(self.text, "折叠文本查看器", self.s,
                   modal=False, wrap='none')
 
     rmenu_specs = (
         # Item structure: (label, method_name).
-        ('copy', 'copy'),
-        ('view', 'view'),
+        ('复制', 'copy'),
+        ('查看', 'view'),
     )
 
     def context_menu_event(self, event):

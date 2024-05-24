@@ -444,10 +444,10 @@ class ShellSidebar(BaseSideBar):
         has_selection = bool(self.text.tag_nextrange('sel', '1.0'))
         def mkcmd(eventname):
             return lambda: self.text.event_generate(eventname)
-        rmenu.add_command(label='Copy',
+        rmenu.add_command(label='复制',
                           command=mkcmd('<<copy>>'),
                           state='normal' if has_selection else 'disabled')
-        rmenu.add_command(label='Copy with prompts',
+        rmenu.add_command(label='带提示符复制',
                           command=mkcmd('<<copy-with-prompts>>'),
                           state='normal' if has_selection else 'disabled')
         rmenu.tk_popup(event.x_root, event.y_root)

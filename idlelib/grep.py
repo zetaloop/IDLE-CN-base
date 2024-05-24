@@ -64,7 +64,7 @@ def findfiles(folder, pattern, recursive):
 class GrepDialog(SearchDialogBase):
     "Dialog for searching multiple files."
 
-    title = "Find in Files Dialog"
+    title = "查找所有文件"
     icon = "Grep"
     needwrapbutton = 0
 
@@ -112,19 +112,19 @@ class GrepDialog(SearchDialogBase):
     def create_entries(self):
         "Create base entry widgets and add widget for search path."
         SearchDialogBase.create_entries(self)
-        self.globent = self.make_entry("In files:", self.globvar)[0]
+        self.globent = self.make_entry("文件:", self.globvar)[0]
 
     def create_other_buttons(self):
         "Add check button to recurse down subdirectories."
         btn = Checkbutton(
                 self.make_frame()[0], variable=self.recvar,
-                text="Recurse down subdirectories")
+                text="遍历子目录")
         btn.pack(side="top", fill="both")
 
     def create_command_buttons(self):
         "Create base command buttons and add button for Search Files."
         SearchDialogBase.create_command_buttons(self)
-        self.make_button("Search Files", self.default_command, isdef=True)
+        self.make_button("查找", self.default_command, isdef=True)
 
     def default_command(self, event=None):
         """Grep for search pattern in file path. The default command is bound
@@ -167,7 +167,7 @@ class GrepDialog(SearchDialogBase):
         filelist = sorted(findfiles(folder, filepat, self.recvar.get()))
         self.close()
         pat = self.engine.getpat()
-        print(f"Searching {pat!r} in {path} ...")
+        print(f"正在 {path} 中查找 {pat!r}...")
         hits = 0
         try:
             for fn in filelist:
@@ -181,8 +181,8 @@ class GrepDialog(SearchDialogBase):
                                 hits += 1
                 except OSError as msg:
                     print(msg)
-            print(f"Hits found: {hits}\n(Hint: right-click to open locations.)"
-                  if hits else "No hits.")
+            print(f"找到{hits}个。\n（提示：右键选择转到文件）"
+                  if hits else "找不到。")
         except AttributeError:
             # Tk window has been closed, OutputWindow.text = None,
             # so in OW.write, OW.text.insert fails.
