@@ -1,9 +1,10 @@
-"""turtledemo.two_canvases
+"""turtledemo.双画布
 
-Use TurtleScreen and RawTurtle to draw on two
-distinct canvases in a separate window. The
-new window must be separately closed in
-addition to pressing the STOP button.
+使用 TurtleScreen 和 RawTurtle
+在两个独立画布上画图，
+并在单独的新窗口显示。
+按下停止按钮后，
+还需要手动关闭新窗口。
 """
 
 from turtle import TurtleScreen, RawTurtle, TK
@@ -51,4 +52,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    TK.mainloop()  # keep window open until user closes it
+    TK.mainloop()  # 保持窗口打开，直到用户把它关掉

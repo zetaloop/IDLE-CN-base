@@ -1,25 +1,23 @@
 #!/usr/bin/env python3
-"""       xturtle-example-suite:
+"""     海龟画图演示套装:
 
-          xtx_kites_and_darts.py
+           平铺图案.py
 
-Constructs two aperiodic penrose-tilings,
-consisting of kites and darts, by the method
-of inflation in six steps.
+构造两个由风筝形和飞镖形组成的非周期性
+彭罗斯平铺图案，通过六个步骤逐渐扩大。
 
-Starting points are the patterns "sun"
-consisting of five kites and "star"
-consisting of five darts.
+一开始分别是五个风筝形的太阳图案
+和五个飞镖形的星星图案。
 
-For more information see:
- http://en.wikipedia.org/wiki/Penrose_tiling
+更多信息参见:
+ https://zh.wikipedia.org/zh-cn/彭罗斯图
  -------------------------------------------
 """
 from turtle import *
 from math import cos, pi
 from time import perf_counter as clock, sleep
 
-f = (5**0.5-1)/2.0   # (sqrt(5)-1)/2 -- golden ratio
+f = (5**0.5-1)/2.0   # (sqrt(5)-1)/2 -- 黄金比例
 d = 2 * cos(3*pi/10)
 
 def kite(l):
@@ -143,7 +141,7 @@ def test(l=200, n=4, fun=sun, startpos=(0,0), th=2):
     tracer(1)
     nk = len([x for x in tiledict if tiledict[x]])
     nd = len([x for x in tiledict if not tiledict[x]])
-    print("%d kites and %d darts = %d pieces." % (nk, nd, nk+nd))
+    print("%d个风筝形和%d个飞镖形，一共%d片。" % (nk, nd, nk+nd))
 
 def demo(fun=sun):
     start()
@@ -156,7 +154,7 @@ def demo(fun=sun):
             sleep(2 - t)
 
 def main():
-    #title("Penrose-tiling with kites and darts.")
+    #title("风筝形和飞镖形组成的彭罗斯平铺。")
     mode("logo")
     bgcolor(0.3, 0.3, 0)
     demo(sun)
@@ -165,10 +163,10 @@ def main():
     pencolor("black")
     goto(0,-200)
     pencolor(0.7,0.7,1)
-    write("Please wait...",
-          align="center", font=('Arial Black', 36, 'bold'))
+    write("请稍等...",
+          align="center", font=('Microsoft YaHei', 36, 'bold'))
     test(600, 8, startpos=(70, 117))
-    return "Done"
+    return "完成"
 
 if __name__ == "__main__":
     msg = main()

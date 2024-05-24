@@ -1,28 +1,24 @@
 #!/usr/bin/env python3
-"""       turtle-example-suite:
+"""     海龟画图演示套装:
 
-        xtx_lindenmayer_indian.py
+          林登麦伊尔.py
 
-Each morning women in Tamil Nadu, in southern
-India, place designs, created by using rice
-flour and known as kolam on the thresholds of
-their homes.
+在印度南部的泰米尔纳德邦，每天早晨，妇女们
+会用米粉在门口地上绘制美丽的 "古拉姆" 图案。
 
-These can be described by Lindenmayer systems,
-which can easily be implemented with turtle
-graphics and Python.
+这些图案可以用林登麦伊尔系统来表示，
+并且很容易用 Python 和海龟画图画出来。
 
-Two examples are shown here:
-(1) the snake kolam
-(2) anklets of Krishna
+这里展示了两个例子:
+(1) 蛇形古拉姆
+(2) 克里希纳的脚链
 
-Taken from Marcia Ascher: Mathematics
-Elsewhere, An Exploration of Ideas Across
-Cultures
+取自 Marcia Ascher 的
+《别处的数学，跨文化的思想探索》
 
 """
 ################################
-# Mini Lindenmayer tool
+# 迷你林登麦伊尔画图器
 ###############################
 
 from turtle import *
@@ -48,7 +44,7 @@ def draw( commands, rules ):
 
 def main():
     ################################
-    # Example 1: Snake kolam
+    # 示例 1: 蛇形古拉姆
     ################################
 
 
@@ -80,7 +76,7 @@ def main():
     sleep(3)
 
     ################################
-    # Example 2: Anklets of Krishna
+    # 示例 2: 克里希纳的脚链
     ################################
 
     def A():
@@ -111,7 +107,7 @@ def main():
     drawing = replace(krishna_start, krishna_replacementRules, 3)
     draw(drawing, krishna_rules)
     tracer(1)
-    return "Done!"
+    return "完成!"
 
 if __name__=='__main__':
     msg = main()
