@@ -1,10 +1,9 @@
-"""turtledemo/nim.py
+"""turtledemo/拿火柴.py
 
-Play nim against the computer. The player
-who takes the last stick is the winner.
+和电脑一起玩拿火柴游戏，
+拿到最后一根就算胜利。
 
-Implements the model-view-controller
-design pattern.
+程序实现了模型-视图-控制器的设计模式。
 """
 
 
@@ -126,7 +125,7 @@ class NimView(object):
         for row in range(3):
             for col in range(MAXSTICKS):
                 self.sticks[(row, col)] = Stick(row, col, game)
-        self.display("... a moment please ...")
+        self.display("... 稍等一下 ...")
         self.screen.tracer(True)
 
     def display(self, msg1, msg2=None):
@@ -135,10 +134,10 @@ class NimView(object):
         if msg2 is not None:
             self.writer.goto(0, - SCREENHEIGHT // 2 + 48)
             self.writer.pencolor("red")
-            self.writer.write(msg2, align="center", font=("Courier",18,"bold"))
+            self.writer.write(msg2, align="center", font=("Microsoft YaHei",18,"bold"))
         self.writer.goto(0, - SCREENHEIGHT // 2 + 20)
         self.writer.pencolor("black")
-        self.writer.write(msg1, align="center", font=("Courier",14,"bold"))
+        self.writer.write(msg1, align="center", font=("Microsoft YaHei",14,"bold"))
         self.screen.tracer(True)
 
     def setup(self):
@@ -149,7 +148,7 @@ class NimView(object):
         for row in range(3):
             for col in range(self.model.sticks[row], MAXSTICKS):
                 self.sticks[(row, col)].color("white")
-        self.display("Your turn! Click leftmost stick to remove.")
+        self.display("轮到你了，点击拿走右边所有火柴。")
         self.screen.tracer(True)
 
     def notify_move(self, row, col, maxspalte, player):
@@ -158,21 +157,21 @@ class NimView(object):
             for s in range(col, maxspalte):
                 self.sticks[(row, s)].color(farbe)
         else:
-            self.display(" ... thinking ...         ")
+            self.display(" ... 我在思考 ...         ")
             time.sleep(0.5)
-            self.display(" ... thinking ... aaah ...")
+            self.display(" ... 我在思考 ... 啊 ...")
             farbe = COLOR
             for s in range(maxspalte-1, col-1, -1):
                 time.sleep(0.2)
                 self.sticks[(row, s)].color(farbe)
-            self.display("Your turn! Click leftmost stick to remove.")
+            self.display("轮到你了，点击拿走右边所有火柴。")
 
     def notify_over(self):
         if self.game.model.winner == 0:
-            msg2 = "Congrats. You're the winner!!!"
+            msg2 = "恭喜，你是赢家！！！"
         else:
-            msg2 = "Sorry, the computer is the winner."
-        self.display("To play again press space bar. To leave press ESC.", msg2)
+            msg2 = "抱歉，电脑赢啦。"
+        self.display("按空格键再玩一次，按 ESC 离开。", msg2)
 
     def clear(self):
         if self.game.state == Nim.OVER:
@@ -189,7 +188,7 @@ class NimController(object):
             stick.onclick(stick.makemove)
         self.game.screen.onkey(self.game.model.setup, "space")
         self.game.screen.onkey(self.game.view.clear, "Escape")
-        self.game.view.display("Press space bar to start game")
+        self.game.view.display("按空格键开始游戏")
         self.game.screen.listen()
 
     def notify_move(self, row, col):

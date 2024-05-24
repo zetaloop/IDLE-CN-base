@@ -1,14 +1,13 @@
 """
     --------------------------------------
-        About this viewer
+        关于这个演示器
     --------------------------------------
 
-    Tiny demo viewer to view turtle graphics example scripts.
+    迷你的演示查看器，用于查看海龟画图演示脚本。
 
-    Quickly and dirtyly assembled by Gregor Lingl.
-    June, 2006
+    由 Gregor Lingl 于2006年6月粗糙编写。
 
-    For more information see: turtledemo - Help
+    更多信息请参见: 演示器 - 帮助
 
-    Have fun!
+    玩得开心！
 """
